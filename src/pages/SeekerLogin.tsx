@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthShell } from "@/components/site/AuthShell";
@@ -8,9 +8,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth";
 
-export const Route = createFileRoute("/seeker/login")({ component: SeekerLogin });
-
-function SeekerLogin() {
+export default function SeekerLogin() {
   const navigate = useNavigate();
   const { refreshRole } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -23,7 +21,7 @@ function SeekerLogin() {
     if (error) { setLoading(false); toast.error(error.message); return; }
     await refreshRole();
     setLoading(false);
-    navigate({ to: "/seeker" });
+    navigate("/seeker");
   };
 
   return (

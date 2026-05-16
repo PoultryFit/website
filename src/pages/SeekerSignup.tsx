@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthShell } from "@/components/site/AuthShell";
@@ -7,9 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/seeker/signup")({ component: SeekerSignup });
-
-function SeekerSignup() {
+export default function SeekerSignup() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [f, setF] = useState({ full_name: "", email: "", phone: "", national_id: "", password: "" });
@@ -28,7 +26,7 @@ function SeekerSignup() {
     setLoading(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Account created. Welcome to Find a Space KE.");
-    navigate({ to: "/seeker" });
+    navigate("/seeker");
   };
 
   return (

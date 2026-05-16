@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -12,11 +11,9 @@ const NAV = [
   { to: "/owner/publish", label: "Publish a Space" },
 ];
 
-export const Route = createFileRoute("/_owner/owner")({ component: OwnerDash });
-
 interface Row { id: string; title: string; town: string; county: string; price: number; views: number; status: string; listing_type: string; images: string[]; }
 
-function OwnerDash() {
+export default function OwnerDashboard() {
   const { user } = useAuth();
   const [name, setName] = useState("");
   const [rows, setRows] = useState<Row[]>([]);
@@ -61,23 +58,12 @@ function OwnerDash() {
             <a href="/owner/publish"><Plus className="mr-2 h-4 w-4" /> Publish a Space</a>
           </Button>
         </div>
-
-        <div className="rounded-2xl border border-savanna/40 bg-savanna/10 p-6">
-          <p className="font-display text-sm uppercase tracking-wider text-primary">How this works</p>
-          <p className="mt-2 text-foreground/85">
-            Tap Publish a Space to add a new listing. Fill in details across six quick steps, upload photos
-            and pin your location on the map. To change anything later, use Edit on the listing. Delete
-            removes it permanently.
-          </p>
-        </div>
-
         <div className="grid gap-4 sm:grid-cols-4">
           <Stat icon={Building2} label="Active Spaces" value={active} />
           <Stat icon={Eye} label="Total Views" value={totalViews} />
           <Stat icon={Heart} label="Saves Received" value={saves} />
           <Stat icon={Eye} label="Unread Alerts" value={0} />
         </div>
-
         {top && (
           <div className="rounded-2xl border border-border bg-card p-6">
             <p className="font-display text-sm uppercase tracking-wider text-primary">Top performing space</p>
@@ -85,7 +71,6 @@ function OwnerDash() {
             <p className="text-sm text-muted-foreground">{top.town}, {top.county} · {top.views} views</p>
           </div>
         )}
-
         <section>
           <h2 className="font-display text-2xl font-bold">Your spaces</h2>
           {rows.length === 0 ? (

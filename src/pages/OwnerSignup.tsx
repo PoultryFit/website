@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthShell } from "@/components/site/AuthShell";
@@ -8,9 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/owner/signup")({ component: OwnerSignup });
-
-function OwnerSignup() {
+export default function OwnerSignup() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [f, setF] = useState({ full_name: "", email: "", phone: "", national_id: "", business_description: "", password: "" });
@@ -29,7 +27,7 @@ function OwnerSignup() {
     setLoading(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Owner account created. Karibu.");
-    navigate({ to: "/owner" });
+    navigate("/owner");
   };
 
   return (

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, redirect, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -8,17 +8,7 @@ import { SpaceCard, type SpaceSummary } from "@/components/space/SpaceCard";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Building2, MapPin, Search, Sparkles, Store, Users } from "lucide-react";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Find a Space KE — Commercial Spaces Across Kenya" },
-      { name: "description", content: "Browse shops, stalls, offices, godowns and warehouses for rent or sale across all 47 Kenyan counties." },
-    ],
-  }),
-  component: LandingPage,
-});
-
-function LandingPage() {
+export default function Landing() {
   const { user, role, loading } = useAuth();
   const navigate = useNavigate();
   const [featured, setFeatured] = useState<SpaceSummary[]>([]);
@@ -27,7 +17,7 @@ function LandingPage() {
   useEffect(() => {
     if (!loading && user && role) {
       const target = role === "admin" ? "/admin" : role === "owner" ? "/owner" : "/seeker";
-      navigate({ to: target });
+      navigate(target);
     }
   }, [user, role, loading, navigate]);
 
@@ -54,8 +44,6 @@ function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
       <PublicNav />
-
-      {/* HERO */}
       <section className="relative overflow-hidden gradient-hero">
         <div className="absolute inset-0 pattern-beadwork opacity-20" />
         <div className="relative mx-auto max-w-6xl px-4 py-24 md:py-32">
@@ -86,7 +74,6 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* WHAT IS */}
       <section className="mx-auto max-w-4xl px-4 py-20">
         <p className="font-display text-xs uppercase tracking-[0.2em] text-primary">What is Find a Space KE</p>
         <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
@@ -101,7 +88,6 @@ function LandingPage() {
         </p>
       </section>
 
-      {/* FEATURED */}
       <section className="bg-secondary/40 py-20">
         <div className="mx-auto max-w-6xl px-4">
           <div className="flex items-end justify-between gap-4">
@@ -131,11 +117,9 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
       <section className="mx-auto max-w-6xl px-4 py-20">
         <p className="font-display text-xs uppercase tracking-[0.2em] text-primary">How it works</p>
         <h2 className="mt-2 font-display text-3xl font-bold md:text-4xl">Two clear paths</h2>
-
         <div className="mt-12 grid gap-10 md:grid-cols-2">
           <div className="rounded-2xl border border-border bg-card p-8">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
@@ -151,7 +135,6 @@ function LandingPage() {
               ))}
             </ol>
           </div>
-
           <div className="rounded-2xl border border-border bg-card p-8">
             <div className="inline-flex items-center gap-2 rounded-full bg-highland/10 px-3 py-1 text-xs font-semibold text-highland">
               <Store className="h-3.5 w-3.5" /> Space Owners
@@ -169,7 +152,6 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* WHO IT IS FOR */}
       <section className="bg-secondary/40 py-20">
         <div className="mx-auto max-w-6xl px-4">
           <p className="font-display text-xs uppercase tracking-[0.2em] text-primary">Who it is for</p>
@@ -192,7 +174,6 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* STATS */}
       <section className="mx-auto max-w-6xl px-4 py-20">
         <div className="grid gap-6 rounded-3xl border border-border bg-card p-10 md:grid-cols-3">
           {[
@@ -209,7 +190,6 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* ONBOARDING NOTICE */}
       <section className="mx-auto max-w-4xl px-4 pb-20">
         <div className="rounded-3xl border border-savanna/40 bg-savanna/15 p-10 text-center">
           <p className="font-display text-xs uppercase tracking-[0.2em] text-primary">A note from us</p>

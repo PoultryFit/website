@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -8,15 +7,13 @@ import { Button } from "@/components/ui/button";
 import { KENYA_COUNTIES } from "@/lib/counties";
 import { Building2, Heart, Search, Store } from "lucide-react";
 
-export const Route = createFileRoute("/_seeker/seeker")({ component: SeekerDashboard });
-
 const NAV = [
   { to: "/seeker", label: "Home" },
   { to: "/seeker/browse", label: "Browse Spaces" },
   { to: "/seeker/saved", label: "Saved" },
 ];
 
-function SeekerDashboard() {
+export default function SeekerDashboard() {
   const { user } = useAuth();
   const [name, setName] = useState("");
   const [stats, setStats] = useState({ total: 0, saved: 0 });
@@ -49,29 +46,17 @@ function SeekerDashboard() {
             to come back to later.
           </p>
         </div>
-
         <div className="flex flex-wrap gap-3">
           <Button asChild size="lg"><a href="/seeker/browse"><Search className="mr-2 h-4 w-4" /> Looking for a Space</a></Button>
           <Button asChild variant="outline" size="lg"><a href="/owner/signup"><Store className="mr-2 h-4 w-4" /> Have a Space and Looking to Rent it Out?</a></Button>
         </div>
-
-        <div className="rounded-2xl border border-savanna/40 bg-savanna/10 p-6">
-          <p className="font-display text-sm uppercase tracking-wider text-primary">Quick start</p>
-          <p className="mt-2 text-foreground/85">
-            Tap Browse Spaces to filter by county, town, type and price. When something looks promising,
-            tap the heart icon to save it for later, then call the owner directly using the number on the listing.
-          </p>
-        </div>
-
         <div className="grid gap-4 sm:grid-cols-3">
           <Stat icon={Building2} label="Spaces Available" value={stats.total} />
           <Stat icon={Heart} label="Saved Spaces" value={stats.saved} />
           <Stat icon={Store} label="Account Type" value="Space Seeker" />
         </div>
-
         <section>
           <h2 className="font-display text-2xl font-bold">Browse by county</h2>
-          <p className="text-sm text-muted-foreground">All 47 counties, one tap away.</p>
           <div className="mt-5 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
             {KENYA_COUNTIES.map((c) => (
               <a key={c} href={`/seeker/browse?county=${encodeURIComponent(c)}`}
@@ -81,7 +66,6 @@ function SeekerDashboard() {
             ))}
           </div>
         </section>
-
         <section>
           <div className="flex items-end justify-between">
             <h2 className="font-display text-2xl font-bold">Latest spaces</h2>

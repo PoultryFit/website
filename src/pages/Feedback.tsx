@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -10,11 +10,11 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/feedback")({ component: Feedback });
-
-function Feedback() {
+export default function Feedback() {
   const { user, role } = useAuth();
-  const [name, setName] = useState(""); const [rating, setRating] = useState(5); const [message, setMessage] = useState("");
+  const [name, setName] = useState("");
+  const [rating, setRating] = useState(5);
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const submit = async (e: React.FormEvent) => {

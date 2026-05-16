@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -13,8 +13,6 @@ const NAV = [
   { to: "/seeker/saved", label: "Saved" },
 ];
 
-export const Route = createFileRoute("/_seeker/spaces/$id")({ component: SpaceDetail });
-
 interface Space {
   id: string; title: string; description: string; space_type: string; listing_type: "rent" | "sale";
   county: string; town: string; estate: string | null; price: number; price_negotiable: boolean;
@@ -23,8 +21,8 @@ interface Space {
 }
 interface Owner { full_name: string; phone: string }
 
-function SpaceDetail() {
-  const { id } = Route.useParams();
+export default function SpaceDetail() {
+  const { id = "" } = useParams<{ id: string }>();
   const { user } = useAuth();
   const [space, setSpace] = useState<Space | null>(null);
   const [owner, setOwner] = useState<Owner | null>(null);
@@ -68,9 +66,7 @@ function SpaceDetail() {
 
   const isRent = space.listing_type === "rent";
   const hasMap = space.latitude != null && space.longitude != null;
-  const mapSrc = hasMap
-    ? `https://www.google.com/maps?q=${space.latitude},${space.longitude}&t=k&z=17&output=embed`
-    : null;
+  const mapSrc = hasMap ? `https://www.google.com/maps?q=${space.latitude},${space.longitude}&t=k&z=17&output=embed` : null;
   const mapsLink = hasMap ? `https://www.google.com/maps?q=${space.latitude},${space.longitude}` : "#";
 
   return (
@@ -91,7 +87,6 @@ function SpaceDetail() {
               ))}
             </div>
           )}
-
           <div>
             <div className="flex flex-wrap gap-2">
               <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium">{space.space_type}</span>
@@ -107,19 +102,16 @@ function SpaceDetail() {
               {isRent && <span className="ml-2 text-sm font-medium text-muted-foreground">per month</span>}
             </p>
           </div>
-
           {space.size_sqft && (
             <div className="rounded-xl border border-border bg-card p-4">
               <p className="text-xs text-muted-foreground uppercase tracking-wider">Size</p>
               <p className="mt-1 font-display text-xl font-semibold">{Number(space.size_sqft).toLocaleString()} sqft</p>
             </div>
           )}
-
           <div>
             <h2 className="font-display text-xl font-semibold">About this space</h2>
             <p className="mt-2 whitespace-pre-line text-foreground/85 leading-relaxed">{space.description}</p>
           </div>
-
           {space.amenities.length > 0 && (
             <div>
               <h2 className="font-display text-xl font-semibold">Amenities</h2>
@@ -128,7 +120,6 @@ function SpaceDetail() {
               </div>
             </div>
           )}
-
           <div>
             <h2 className="font-display text-xl font-semibold">Location</h2>
             {mapSrc ? (
@@ -145,7 +136,6 @@ function SpaceDetail() {
             )}
           </div>
         </div>
-
         <aside className="space-y-4 lg:sticky lg:top-20 h-fit">
           <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
             <p className="text-xs uppercase tracking-wider text-muted-foreground">Owner</p>

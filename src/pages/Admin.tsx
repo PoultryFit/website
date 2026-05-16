@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
@@ -7,9 +6,7 @@ import { toast } from "sonner";
 
 const NAV = [{ to: "/admin", label: "Admin" }];
 
-export const Route = createFileRoute("/_admin/admin")({ component: Admin });
-
-function Admin() {
+export default function Admin() {
   const [stats, setStats] = useState({ seekers: 0, owners: 0, admins: 0, spaces: 0, active: 0, inactive: 0, views: 0 });
   const [spaces, setSpaces] = useState<any[]>([]);
   const [feedback, setFeedback] = useState<any[]>([]);
@@ -51,7 +48,6 @@ function Admin() {
     <DashboardShell nav={NAV} accent="savanna">
       <div className="space-y-10">
         <h1 className="font-display text-3xl font-bold">Admin control center</h1>
-
         <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-7">
           {[
             ["Seekers", stats.seekers], ["Owners", stats.owners], ["Admins", stats.admins],
@@ -64,7 +60,6 @@ function Admin() {
             </div>
           ))}
         </div>
-
         <section>
           <h2 className="font-display text-xl font-bold">Manage spaces</h2>
           <div className="mt-3 divide-y divide-border rounded-2xl border border-border bg-card">
@@ -81,9 +76,8 @@ function Admin() {
             {spaces.length === 0 && <p className="p-6 text-center text-muted-foreground">No spaces yet.</p>}
           </div>
         </section>
-
         <section>
-          <h2 className="font-display text-xl font-bold">User feedback (read-only)</h2>
+          <h2 className="font-display text-xl font-bold">User feedback</h2>
           <div className="mt-3 space-y-3">
             {feedback.map((m) => (
               <div key={m.id} className="rounded-xl border border-border bg-card p-4">
@@ -98,10 +92,6 @@ function Admin() {
             {feedback.length === 0 && <p className="rounded-xl border border-dashed border-border p-6 text-center text-muted-foreground">No feedback yet.</p>}
           </div>
         </section>
-
-        <p className="rounded-xl border border-savanna/40 bg-savanna/10 p-4 text-sm text-foreground/80">
-          Platform model note: Find a Space KE is free during the onboarding period.
-        </p>
       </div>
     </DashboardShell>
   );

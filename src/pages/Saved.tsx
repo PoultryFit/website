@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -12,9 +11,7 @@ const NAV = [
   { to: "/seeker/saved", label: "Saved" },
 ];
 
-export const Route = createFileRoute("/_seeker/saved")({ component: Saved });
-
-function Saved() {
+export default function Saved() {
   const { user } = useAuth();
   const [items, setItems] = useState<SpaceSummary[]>([]);
 

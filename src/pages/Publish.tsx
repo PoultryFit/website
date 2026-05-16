@@ -1,5 +1,5 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
@@ -18,16 +18,11 @@ const NAV = [
   { to: "/owner", label: "My Spaces" },
   { to: "/owner/publish", label: "Publish a Space" },
 ];
-
-export const Route = createFileRoute("/_owner/publish")({
-  validateSearch: (s: Record<string, unknown>) => ({ id: typeof s.id === "string" ? s.id : "" }),
-  component: Publish,
-});
-
 const STEPS = ["Basics", "Details", "Amenities", "Photos", "Location", "Review"];
 
-function Publish() {
-  const { id } = Route.useSearch();
+export default function Publish() {
+  const [params] = useSearchParams();
+  const id = params.get("id") ?? "";
   const { user } = useAuth();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
@@ -88,7 +83,7 @@ function Publish() {
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     toast.success(id ? "Listing updated" : "Listing published");
-    navigate({ to: "/owner" });
+    navigate("/owner");
   };
 
   const next = () => setStep((s) => Math.min(s + 1, STEPS.length - 1));
@@ -97,7 +92,6 @@ function Publish() {
   return (
     <DashboardShell nav={NAV} accent="highland">
       <h1 className="font-display text-3xl font-bold">{id ? "Edit space" : "Publish a space"}</h1>
-
       <div className="mt-6 flex items-center gap-2 overflow-x-auto">
         {STEPS.map((s, i) => (
           <div key={s} className="flex items-center gap-2 shrink-0">
@@ -109,7 +103,6 @@ function Publish() {
           </div>
         ))}
       </div>
-
       <div className="mt-8 rounded-2xl border border-border bg-card p-6 max-w-3xl">
         {step === 0 && (
           <div className="space-y-4">
@@ -147,7 +140,7 @@ function Publish() {
         {step === 1 && (
           <div className="space-y-4">
             <div><Label>Size (sqft)</Label><Input type="number" value={f.size_sqft} onChange={(e) => setF({ ...f, size_sqft: e.target.value })} /></div>
-            <div><Label>Description</Label><Textarea rows={8} value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} placeholder="Describe the space, location advantages, condition, and anything a seeker should know." /></div>
+            <div><Label>Description</Label><Textarea rows={8} value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} /></div>
           </div>
         )}
         {step === 2 && (
@@ -195,10 +188,7 @@ function Publish() {
         )}
         {step === 4 && (
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">
-              Pin your exact location. You can find coordinates by opening Google Maps, right-clicking the
-              spot, and copying the lat/lng pair. Then paste them below.
-            </p>
+            <p className="text-sm text-muted-foreground">Paste latitude/longitude from Google Maps (right-click on the spot).</p>
             <div className="grid sm:grid-cols-2 gap-3">
               <div><Label>Latitude</Label><Input value={f.latitude} onChange={(e) => setF({ ...f, latitude: e.target.value })} placeholder="-1.286389" /></div>
               <div><Label>Longitude</Label><Input value={f.longitude} onChange={(e) => setF({ ...f, longitude: e.target.value })} placeholder="36.817223" /></div>
@@ -226,7 +216,6 @@ function Publish() {
             </ul>
           </div>
         )}
-
         <div className="mt-8 flex justify-between">
           <Button variant="outline" onClick={back} disabled={step === 0}>Back</Button>
           {step < STEPS.length - 1 ? (

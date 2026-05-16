@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PublicNav } from "@/components/site/PublicNav";
@@ -9,9 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/support")({ component: Support });
-
-function Support() {
+export default function Support() {
   const [f, setF] = useState({ name: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
 

@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { SpaceCard, type SpaceSummary } from "@/components/space/SpaceCard";
@@ -16,15 +16,9 @@ const NAV = [
   { to: "/seeker/saved", label: "Saved" },
 ];
 
-export const Route = createFileRoute("/_seeker/browse")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    county: typeof s.county === "string" ? s.county : "",
-  }),
-  component: Browse,
-});
-
-function Browse() {
-  const { county: initCounty } = Route.useSearch();
+export default function Browse() {
+  const [params] = useSearchParams();
+  const initCounty = params.get("county") ?? "";
   const [county, setCounty] = useState(initCounty || "all");
   const [town, setTown] = useState("");
   const [type, setType] = useState("all");
@@ -51,7 +45,6 @@ function Browse() {
     if (minSize) q = q.gte("size_sqft", Number(minSize));
     if (maxSize) q = q.lte("size_sqft", Number(maxSize));
     if (amenities.length) q = q.contains("amenities", amenities);
-
     const { data } = await q.order("created_at", { ascending: false }).limit(60);
     setResults((data ?? []) as SpaceSummary[]);
     setLoading(false);
@@ -117,7 +110,6 @@ function Browse() {
             <Button onClick={search} className="w-full">{loading ? "Searching…" : "Apply filters"}</Button>
           </div>
         </aside>
-
         <div>
           <div className="flex items-baseline justify-between">
             <h1 className="font-display text-3xl font-bold">Browse spaces</h1>
