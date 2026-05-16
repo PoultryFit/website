@@ -1,5 +1,5 @@
 import { Routes, Route, Link, Navigate, useLocation } from "react-router-dom";
-import { useEffect, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useAuth } from "@/lib/auth";
 
 import Landing from "@/pages/Landing";
@@ -83,6 +83,3 @@ function NotFound() {
     </div>
   );
 }
-
-// Hush unused import warning for useEffect in some bundlers
-void useEffect;
