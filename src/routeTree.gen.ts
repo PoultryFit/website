@@ -10,33 +10,89 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SeekerSignupRouteImport } from './routes/seeker.signup'
+import { Route as SeekerLoginRouteImport } from './routes/seeker.login'
+import { Route as OwnerSignupRouteImport } from './routes/owner.signup'
+import { Route as OwnerLoginRouteImport } from './routes/owner.login'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SeekerSignupRoute = SeekerSignupRouteImport.update({
+  id: '/seeker/signup',
+  path: '/seeker/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeekerLoginRoute = SeekerLoginRouteImport.update({
+  id: '/seeker/login',
+  path: '/seeker/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerSignupRoute = OwnerSignupRouteImport.update({
+  id: '/owner/signup',
+  path: '/owner/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OwnerLoginRoute = OwnerLoginRouteImport.update({
+  id: '/owner/login',
+  path: '/owner/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/owner/login': typeof OwnerLoginRoute
+  '/owner/signup': typeof OwnerSignupRoute
+  '/seeker/login': typeof SeekerLoginRoute
+  '/seeker/signup': typeof SeekerSignupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/owner/login': typeof OwnerLoginRoute
+  '/owner/signup': typeof OwnerSignupRoute
+  '/seeker/login': typeof SeekerLoginRoute
+  '/seeker/signup': typeof SeekerSignupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/owner/login': typeof OwnerLoginRoute
+  '/owner/signup': typeof OwnerSignupRoute
+  '/seeker/login': typeof SeekerLoginRoute
+  '/seeker/signup': typeof SeekerSignupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/owner/login'
+    | '/owner/signup'
+    | '/seeker/login'
+    | '/seeker/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/owner/login'
+    | '/owner/signup'
+    | '/seeker/login'
+    | '/seeker/signup'
+  id:
+    | '__root__'
+    | '/'
+    | '/owner/login'
+    | '/owner/signup'
+    | '/seeker/login'
+    | '/seeker/signup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  OwnerLoginRoute: typeof OwnerLoginRoute
+  OwnerSignupRoute: typeof OwnerSignupRoute
+  SeekerLoginRoute: typeof SeekerLoginRoute
+  SeekerSignupRoute: typeof SeekerSignupRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,12 +104,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/seeker/signup': {
+      id: '/seeker/signup'
+      path: '/seeker/signup'
+      fullPath: '/seeker/signup'
+      preLoaderRoute: typeof SeekerSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seeker/login': {
+      id: '/seeker/login'
+      path: '/seeker/login'
+      fullPath: '/seeker/login'
+      preLoaderRoute: typeof SeekerLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner/signup': {
+      id: '/owner/signup'
+      path: '/owner/signup'
+      fullPath: '/owner/signup'
+      preLoaderRoute: typeof OwnerSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/owner/login': {
+      id: '/owner/login'
+      path: '/owner/login'
+      fullPath: '/owner/login'
+      preLoaderRoute: typeof OwnerLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  OwnerLoginRoute: OwnerLoginRoute,
+  OwnerSignupRoute: OwnerSignupRoute,
+  SeekerLoginRoute: SeekerLoginRoute,
+  SeekerSignupRoute: SeekerSignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
