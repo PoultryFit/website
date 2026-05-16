@@ -124,7 +124,7 @@ function LandingPage() {
           ) : (
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {featured.map((s) => (
-                <SpaceCard key={s.id} space={s} to="/seeker/login" />
+                <SpaceCard key={s.id} space={s} href="/seeker/login" />
               ))}
             </div>
           )}
