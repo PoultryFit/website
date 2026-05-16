@@ -47,7 +47,7 @@ function Publish() {
       if (!data) return;
       setF({
         title: data.title, space_type: data.space_type, county: data.county, town: data.town,
-        estate: data.estate ?? "", listing_type: data.listing_type, price: String(data.price),
+        estate: data.estate ?? "", listing_type: data.listing_type as "rent" | "sale", price: String(data.price),
         price_negotiable: data.price_negotiable, size_sqft: data.size_sqft ? String(data.size_sqft) : "",
         description: data.description, amenities: data.amenities ?? [], images: data.images ?? [],
         latitude: data.latitude != null ? String(data.latitude) : "",
