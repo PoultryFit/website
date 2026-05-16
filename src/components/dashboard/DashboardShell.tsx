@@ -1,4 +1,4 @@
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Logo } from "@/components/site/Logo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
@@ -12,11 +12,11 @@ export function DashboardShell({
 }: { nav: NavItem[]; accent: "primary" | "highland" | "savanna"; children: ReactNode }) {
   const { signOut } = useAuth();
   const navigate = useNavigate();
-  const path = useRouterState({ select: (s) => s.location.pathname });
+  const path = useLocation().pathname;
 
   const handleSignOut = async () => {
     await signOut();
-    navigate({ to: "/" });
+    navigate("/");
   };
 
   const accentClass = accent === "highland" ? "border-l-highland" : accent === "savanna" ? "border-l-savanna" : "border-l-primary";
