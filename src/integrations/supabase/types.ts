@@ -14,16 +14,297 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      feedback: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          rating: number | null
+          user_id: string
+          user_role: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          rating?: number | null
+          user_id: string
+          user_role: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          rating?: number | null
+          user_id?: string
+          user_role?: string
+        }
+        Relationships: []
+      }
+      saved_spaces: {
+        Row: {
+          created_at: string
+          id: string
+          seeker_id: string
+          space_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          seeker_id: string
+          space_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          seeker_id?: string
+          space_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_spaces_seeker_id_fkey"
+            columns: ["seeker_id"]
+            isOneToOne: false
+            referencedRelation: "space_seekers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "saved_spaces_space_id_fkey"
+            columns: ["space_id"]
+            isOneToOne: false
+            referencedRelation: "spaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      space_owners: {
+        Row: {
+          business_description: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          last_login: string | null
+          national_id: string
+          phone: string
+          plan_type: string
+          verification_status: string
+        }
+        Insert: {
+          business_description: string
+          created_at?: string
+          email: string
+          full_name: string
+          id: string
+          last_login?: string | null
+          national_id: string
+          phone: string
+          plan_type?: string
+          verification_status?: string
+        }
+        Update: {
+          business_description?: string
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          last_login?: string | null
+          national_id?: string
+          phone?: string
+          plan_type?: string
+          verification_status?: string
+        }
+        Relationships: []
+      }
+      space_seekers: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          last_login: string | null
+          national_id: string
+          phone: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id: string
+          last_login?: string | null
+          national_id: string
+          phone: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          last_login?: string | null
+          national_id?: string
+          phone?: string
+        }
+        Relationships: []
+      }
+      space_waitlist: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      spaces: {
+        Row: {
+          amenities: string[]
+          county: string
+          created_at: string
+          description: string
+          estate: string | null
+          id: string
+          images: string[]
+          latitude: number | null
+          listing_type: string
+          longitude: number | null
+          owner_id: string
+          price: number
+          price_negotiable: boolean
+          size_sqft: number | null
+          space_type: string
+          status: string
+          title: string
+          town: string
+          updated_at: string
+          views: number
+        }
+        Insert: {
+          amenities?: string[]
+          county: string
+          created_at?: string
+          description: string
+          estate?: string | null
+          id?: string
+          images?: string[]
+          latitude?: number | null
+          listing_type: string
+          longitude?: number | null
+          owner_id: string
+          price: number
+          price_negotiable?: boolean
+          size_sqft?: number | null
+          space_type: string
+          status?: string
+          title: string
+          town: string
+          updated_at?: string
+          views?: number
+        }
+        Update: {
+          amenities?: string[]
+          county?: string
+          created_at?: string
+          description?: string
+          estate?: string | null
+          id?: string
+          images?: string[]
+          latitude?: number | null
+          listing_type?: string
+          longitude?: number | null
+          owner_id?: string
+          price?: number
+          price_negotiable?: boolean
+          size_sqft?: number | null
+          space_type?: string
+          status?: string
+          title?: string
+          town?: string
+          updated_at?: string
+          views?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spaces_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "space_owners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_messages: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      increment_space_views: { Args: { _space_id: string }; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "seeker" | "owner" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +431,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["seeker", "owner", "admin"],
+    },
   },
 } as const
