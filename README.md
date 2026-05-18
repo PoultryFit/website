@@ -1,45 +1,54 @@
 # Find a Space KE
 
-A Kenyan commercial space marketplace. Anyone, anywhere in the 47 counties, can browse shops, offices, warehouses, stalls and other commercial spaces for rent or sale, see exact map locations, and contact owners directly — no agents, no travel.
+A Kenyan commercial space marketplace for browsing, saving, publishing, and managing shops, offices, warehouses, stalls, and other commercial spaces across all 47 counties.
 
-## Stack
+## Tech stack
 
-- React 19 + TanStack Start (Vite 7)
-- Tailwind CSS v4 + shadcn/ui
-- Supabase (auth, Postgres with RLS, storage)
-- Deploys to Cloudflare Workers (default) or Netlify
+- Vite + React 19 + TypeScript
+- React Router DOM v6 for client-side routing
+- TanStack Query for async state
+- Tailwind CSS v4 + shadcn/ui components
+- Supabase client integration for auth, database, and storage
+- Netlify static deployment with `dist` as the publish directory
 
 ## Features
 
-- Two account types: Space Seekers and Space Owners, each with separate signup, login, and dashboard
-- 6-step publish wizard (basics → details → amenities → photos → location → review)
-- Image uploads to `space-images` bucket, up to 10 per listing, first photo is the cover
-- Browse with filters: county, town, space type, listing type, price, size, amenities
-- Listing detail with gallery, amenities, map pin and "Open in Google Maps" link
-- Save listings, contact owner, view counter
-- Admin control center (read-only) for users, spaces and feedback
-- Public feedback and support pages
+- Public landing, feedback, and support pages
+- Seeker signup/login, dashboard, browse filters, saved listings, and space details
+- Owner signup/login, dashboard, and multi-step space publishing flow
+- Admin view for users, spaces, feedback, support messages, and waitlist entries
+- Image uploads to the public `space-images` storage bucket
+- Database migrations with RLS policies and role-based access
 
-## Getting started
+## Local setup
+
+```bash
+npm install
+npm run dev
+```
+
+Or with Bun:
 
 ```bash
 bun install
 bun run dev
 ```
 
-The app expects the following environment variables (auto-provisioned by Lovable Cloud, or set manually in Netlify / Cloudflare):
+Create a local `.env` file from `.env.example` and fill in your own Supabase project values:
 
-```
+```env
 VITE_SUPABASE_URL=
 VITE_SUPABASE_PUBLISHABLE_KEY=
 VITE_SUPABASE_PROJECT_ID=
 ```
 
+Only `VITE_*` variables are used by the browser build.
+
 ## Database
 
-All schema lives in `supabase/migrations/` as versioned SQL files. Tables: `space_seekers`, `space_owners`, `spaces`, `saved_spaces`, `feedback`, `support_messages`, `space_waitlist`, `user_roles`. Roles are managed via the `app_role` enum (`seeker`, `owner`, `admin`) and a `has_role()` security-definer function. RLS is enabled on every table.
+Schema migrations live in `supabase/migrations/`. They create the role system, profile tables, listings, saved spaces, feedback, support messages, waitlist, storage bucket policies, and helper functions.
 
-To grant the first admin, insert into `user_roles` after the user signs up:
+Apply the migrations to your own Supabase project before using the hosted app. To grant the first admin after signup:
 
 ```sql
 insert into public.user_roles (user_id, role)
@@ -48,23 +57,28 @@ select id, 'admin' from auth.users where email = 'you@example.com';
 
 ## Project structure
 
-```
+```text
 src/
-  routes/              file-based routes (TanStack Router)
-    _seeker/           authenticated seeker pages
-    _owner/            authenticated owner pages
-    _admin/            authenticated admin pages
-  components/          UI, dashboard shell, space cards
-  integrations/supabase/  auto-generated Supabase client and types
-  lib/                 auth provider, counties, helpers
-  styles.css           design tokens (Kenyan palette, Fraunces + Plus Jakarta Sans)
-supabase/migrations/   versioned SQL migrations
+  App.tsx                    React Router route tree
+  main.tsx                   Vite React entry point
+  pages/                     public, seeker, owner, and admin pages
+  components/                layout, dashboard, listing, and UI components
+  integrations/supabase/     Supabase browser client and generated types
+  lib/                       auth provider, counties, and utilities
+  styles.css                 Tailwind v4 theme and global styles
+supabase/migrations/         SQL migrations
+public/_redirects            Netlify SPA fallback
+netlify.toml                 Netlify build config
 ```
 
-## Deploy
+## Netlify deployment
 
-- **Lovable**: push happens automatically on every change.
-- **Netlify / Cloudflare**: connect the GitHub repo, set the three `VITE_SUPABASE_*` env vars, and deploy. No manual schema steps required — migrations are applied via Supabase.
+1. Connect the GitHub repo to Netlify.
+2. Set environment variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, and `VITE_SUPABASE_PROJECT_ID`.
+3. Use build command `npm run build`.
+4. Use publish directory `dist`.
+
+This is a static SPA. There is no SSR, no TanStack Start server, and no server functions required.
 
 ## License
 
