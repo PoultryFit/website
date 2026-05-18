@@ -1,8 +1,10 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "find-a-space-ke",
   "private": true,
-  "sideEffects": false,
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -54,7 +56,7 @@
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.71.2",
     "react-resizable-panels": "^4.6.5",
-    "react-router-dom": "^7.15.1",
+    "react-router-dom": "^6.30.2",
     "recharts": "^2.15.4",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
