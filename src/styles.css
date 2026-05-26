@@ -1,6 +1,7 @@
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
+@import "leaflet/dist/leaflet.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -13,7 +14,7 @@
   --radius-3xl: calc(var(--radius) + 12px);
 
   --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -57,78 +58,72 @@
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 0.875rem;
 
-  /* Warm Kenyan off-white, like sun-bleached canvas */
-  --background: oklch(0.985 0.012 75);
-  --foreground: oklch(0.22 0.03 40);
+  /* Warm ivory base */
+  --background: oklch(0.985 0.006 80);
+  --foreground: oklch(0.18 0.04 250);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.03 40);
+  --card-foreground: oklch(0.18 0.04 250);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.03 40);
+  --popover-foreground: oklch(0.18 0.04 250);
 
-  /* Terracotta primary — Kenyan red soil */
-  --primary: oklch(0.55 0.16 38);
-  --primary-foreground: oklch(0.99 0.01 75);
+  /* Deep navy primary */
+  --primary: oklch(0.24 0.07 260);
+  --primary-foreground: oklch(0.985 0.006 80);
 
-  /* Warm sand secondary */
-  --secondary: oklch(0.93 0.04 75);
-  --secondary-foreground: oklch(0.28 0.05 40);
+  --secondary: oklch(0.95 0.012 80);
+  --secondary-foreground: oklch(0.22 0.05 260);
 
-  --muted: oklch(0.95 0.02 75);
-  --muted-foreground: oklch(0.48 0.03 50);
+  --muted: oklch(0.96 0.008 80);
+  --muted-foreground: oklch(0.5 0.02 255);
 
-  --accent: oklch(0.92 0.05 75);
-  --accent-foreground: oklch(0.28 0.05 40);
+  --accent: oklch(0.93 0.018 80);
+  --accent-foreground: oklch(0.22 0.05 260);
 
   --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.99 0.01 75);
+  --destructive-foreground: oklch(0.985 0.006 80);
 
-  --border: oklch(0.9 0.025 70);
-  --input: oklch(0.9 0.025 70);
-  --ring: oklch(0.55 0.16 38);
+  --border: oklch(0.91 0.012 80);
+  --input: oklch(0.91 0.012 80);
+  --ring: oklch(0.7 0.13 78);
 
-  /* Kenyan accent tokens */
-  --highland: oklch(0.42 0.08 155);      /* deep highland green */
-  --highland-foreground: oklch(0.98 0.01 75);
-  --savanna: oklch(0.78 0.14 80);        /* golden savanna */
-  --savanna-foreground: oklch(0.22 0.05 40);
-  --maasai: oklch(0.5 0.21 25);          /* Maasai red */
-  --maasai-foreground: oklch(0.99 0.01 75);
+  /* Gold accent (highland reused as a complementary deep teal-green for "verified" badges) */
+  --highland: oklch(0.42 0.09 175);
+  --highland-foreground: oklch(0.99 0.01 80);
+  /* Warm gold */
+  --savanna: oklch(0.78 0.13 78);
+  --savanna-foreground: oklch(0.18 0.04 250);
+  /* Refined burgundy */
+  --maasai: oklch(0.46 0.16 25);
+  --maasai-foreground: oklch(0.99 0.01 80);
 
-  --chart-1: oklch(0.55 0.16 38);
-  --chart-2: oklch(0.42 0.08 155);
-  --chart-3: oklch(0.78 0.14 80);
-  --chart-4: oklch(0.5 0.21 25);
-  --chart-5: oklch(0.4 0.06 240);
+  --chart-1: oklch(0.24 0.07 260);
+  --chart-2: oklch(0.78 0.13 78);
+  --chart-3: oklch(0.42 0.09 175);
+  --chart-4: oklch(0.46 0.16 25);
+  --chart-5: oklch(0.55 0.06 250);
 
-  --sidebar: oklch(0.97 0.015 75);
-  --sidebar-foreground: oklch(0.22 0.03 40);
-  --sidebar-primary: oklch(0.55 0.16 38);
-  --sidebar-primary-foreground: oklch(0.99 0.01 75);
-  --sidebar-accent: oklch(0.93 0.04 75);
-  --sidebar-accent-foreground: oklch(0.28 0.05 40);
-  --sidebar-border: oklch(0.9 0.025 70);
-  --sidebar-ring: oklch(0.55 0.16 38);
+  --sidebar: oklch(0.97 0.008 80);
+  --sidebar-foreground: oklch(0.18 0.04 250);
+  --sidebar-primary: oklch(0.24 0.07 260);
+  --sidebar-primary-foreground: oklch(0.985 0.006 80);
+  --sidebar-accent: oklch(0.93 0.018 80);
+  --sidebar-accent-foreground: oklch(0.22 0.05 260);
+  --sidebar-border: oklch(0.91 0.012 80);
+  --sidebar-ring: oklch(0.7 0.13 78);
 }
 
 @layer base {
-  * {
-    border-color: var(--color-border);
-  }
-
-  html {
-    font-family: var(--font-sans);
-  }
-
+  * { border-color: var(--color-border); }
+  html { font-family: var(--font-sans); }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-
   h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
@@ -139,41 +134,34 @@
   .font-display { font-family: var(--font-display); }
   .font-sans { font-family: var(--font-sans); }
 
-  /* Subtle kikoi-weave background accent */
-  .pattern-kikoi {
-    background-image:
-      repeating-linear-gradient(
-        45deg,
-        color-mix(in oklab, var(--primary) 8%, transparent) 0 2px,
-        transparent 2px 14px
-      ),
-      repeating-linear-gradient(
-        -45deg,
-        color-mix(in oklab, var(--highland) 6%, transparent) 0 2px,
-        transparent 2px 14px
-      );
-  }
-
-  .pattern-beadwork {
-    background-image: radial-gradient(
-      circle at 1px 1px,
-      color-mix(in oklab, var(--primary) 25%, transparent) 1px,
-      transparent 0
-    );
-    background-size: 14px 14px;
-  }
-
   .gradient-hero {
     background:
+      radial-gradient(1200px 600px at 80% -10%, color-mix(in oklab, var(--savanna) 35%, transparent) 0%, transparent 60%),
       linear-gradient(135deg,
-        color-mix(in oklab, var(--primary) 92%, black) 0%,
-        color-mix(in oklab, var(--maasai) 85%, black) 55%,
-        color-mix(in oklab, var(--highland) 80%, black) 100%);
+        color-mix(in oklab, var(--primary) 100%, black 8%) 0%,
+        color-mix(in oklab, var(--primary) 85%, black) 55%,
+        color-mix(in oklab, var(--primary) 70%, var(--savanna) 20%) 100%);
   }
 
   .gradient-warm {
     background: linear-gradient(180deg,
       var(--background) 0%,
-      color-mix(in oklab, var(--savanna) 22%, var(--background)) 100%);
+      color-mix(in oklab, var(--savanna) 14%, var(--background)) 100%);
+  }
+
+  .text-gold { color: var(--savanna); }
+  .bg-gold { background-color: var(--savanna); color: var(--savanna-foreground); }
+
+  .shadow-elegant { box-shadow: 0 30px 60px -30px color-mix(in oklab, var(--primary) 50%, transparent); }
+  .shadow-soft { box-shadow: 0 8px 24px -12px color-mix(in oklab, var(--primary) 25%, transparent); }
+
+  .pattern-beadwork {
+    background-image: radial-gradient(circle at 1px 1px,
+      color-mix(in oklab, var(--savanna) 35%, transparent) 1px, transparent 0);
+    background-size: 18px 18px;
   }
 }
+
+/* Leaflet polish */
+.leaflet-container { font-family: var(--font-sans); border-radius: 0.875rem; }
+.leaflet-control-attribution { font-size: 10px; opacity: 0.7; }
