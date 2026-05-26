@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { SpaceCard, type SpaceSummary } from "@/components/space/SpaceCard";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { KENYA_COUNTIES } from "@/lib/counties";
-import { Building2, Heart, Search, Store } from "lucide-react";
+import { Building2, Heart, Search, SlidersHorizontal, Store } from "lucide-react";
 
 const NAV = [
   { to: "/seeker", label: "Home" },
@@ -15,9 +18,12 @@ const NAV = [
 
 export default function SeekerDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [stats, setStats] = useState({ total: 0, saved: 0 });
   const [latest, setLatest] = useState<SpaceSummary[]>([]);
+  const [query, setQuery] = useState("");
+  const [filterCounty, setFilterCounty] = useState<string>("");
 
   useEffect(() => {
     if (!user) return;
@@ -35,37 +41,77 @@ export default function SeekerDashboard() {
     })();
   }, [user]);
 
+  const runSearch = () => {
+    const params = new URLSearchParams();
+    if (query.trim()) params.set("q", query.trim());
+    if (filterCounty) params.set("county", filterCounty);
+    navigate(`/seeker/browse?${params.toString()}`);
+  };
+
   return (
     <DashboardShell nav={NAV} accent="primary">
       <div className="space-y-10">
-        <div>
-          <p className="text-sm text-muted-foreground">Karibu</p>
-          <h1 className="font-display text-4xl font-bold">{name || "Space Seeker"}</h1>
-          <p className="mt-2 max-w-2xl text-muted-foreground">
-            Browse spaces by county, filter by what matters to you, and save the ones you like
-            to come back to later.
-          </p>
+        <div className="relative overflow-hidden rounded-3xl gradient-hero p-8 md:p-10 shadow-elegant">
+          <div className="absolute inset-0 pattern-beadwork opacity-10" />
+          <div className="relative">
+            <p className="text-sm text-white/80">Karibu</p>
+            <h1 className="font-display text-4xl font-bold text-white md:text-5xl">{name || "Space Seeker"}</h1>
+            <p className="mt-2 max-w-2xl text-white/85">
+              Search by town, area, or county. Use filters to narrow it down, and save the spaces you like.
+            </p>
+
+            <div className="mt-6 flex flex-wrap items-center gap-2 rounded-2xl bg-white/10 p-2 backdrop-blur ring-1 ring-white/15">
+              <div className="relative flex-1 min-w-[220px]">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && runSearch()}
+                  placeholder="Search by town, area or keyword..."
+                  className="bg-background pl-9 h-11"
+                />
+              </div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="h-11 bg-background">
+                    <SlidersHorizontal className="mr-2 h-4 w-4" />
+                    Filter {filterCounty && <span className="ml-1 rounded bg-gold/40 px-1.5 text-[10px] font-semibold text-foreground">{filterCounty}</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-72 p-0" align="end">
+                  <div className="border-b border-border p-3">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Filter by County</p>
+                  </div>
+                  <div className="max-h-72 overflow-y-auto p-1">
+                    <button
+                      onClick={() => setFilterCounty("")}
+                      className={`w-full rounded px-3 py-1.5 text-left text-sm hover:bg-secondary ${filterCounty === "" ? "bg-secondary font-semibold" : ""}`}
+                    >
+                      All counties
+                    </button>
+                    {KENYA_COUNTIES.map((c) => (
+                      <button
+                        key={c}
+                        onClick={() => setFilterCounty(c)}
+                        className={`w-full rounded px-3 py-1.5 text-left text-sm hover:bg-secondary ${filterCounty === c ? "bg-secondary font-semibold" : ""}`}
+                      >
+                        {c}
+                      </button>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
+              <Button onClick={runSearch} className="h-11 bg-gold font-semibold text-[color:var(--savanna-foreground)] hover:bg-gold/90">Search</Button>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <Button asChild size="lg"><a href="/seeker/browse"><Search className="mr-2 h-4 w-4" /> Looking for a Space</a></Button>
-          <Button asChild variant="outline" size="lg"><a href="/owner/signup"><Store className="mr-2 h-4 w-4" /> Have a Space and Looking to Rent it Out?</a></Button>
-        </div>
+
         <div className="grid gap-4 sm:grid-cols-3">
           <Stat icon={Building2} label="Spaces Available" value={stats.total} />
           <Stat icon={Heart} label="Saved Spaces" value={stats.saved} />
           <Stat icon={Store} label="Account Type" value="Space Seeker" />
         </div>
-        <section>
-          <h2 className="font-display text-2xl font-bold">Browse by county</h2>
-          <div className="mt-5 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
-            {KENYA_COUNTIES.map((c) => (
-              <a key={c} href={`/seeker/browse?county=${encodeURIComponent(c)}`}
-                 className="rounded-lg border border-border bg-card px-4 py-3 text-sm font-medium hover:border-primary hover:bg-primary/5 transition">
-                {c}
-              </a>
-            ))}
-          </div>
-        </section>
+
         <section>
           <div className="flex items-end justify-between">
             <h2 className="font-display text-2xl font-bold">Latest spaces</h2>
