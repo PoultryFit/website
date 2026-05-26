@@ -19,8 +19,9 @@ const NAV = [
 export default function Browse() {
   const [params] = useSearchParams();
   const initCounty = params.get("county") ?? "";
+  const initQuery = params.get("q") ?? "";
   const [county, setCounty] = useState(initCounty || "all");
-  const [town, setTown] = useState("");
+  const [town, setTown] = useState(initQuery);
   const [type, setType] = useState("all");
   const [listing, setListing] = useState("all");
   const [minPrice, setMinPrice] = useState("");
