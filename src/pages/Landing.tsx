@@ -7,6 +7,7 @@ import { Footer } from "@/components/site/Footer";
 import { SpaceCard, type SpaceSummary } from "@/components/space/SpaceCard";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Building2, MapPin, Search, Sparkles, Store, Users } from "lucide-react";
+import heroImage from "@/assets/hero-aerial.jpg";
 
 export default function Landing() {
   const { user, role, loading } = useAuth();
@@ -28,7 +29,7 @@ export default function Landing() {
         .select("id,title,space_type,listing_type,county,town,price,images")
         .eq("status", "active")
         .order("created_at", { ascending: false })
-        .limit(10);
+        .limit(8);
       setFeatured((data ?? []) as SpaceSummary[]);
 
       const [{ count: sc }, { data: countyData }, { count: oc }] = await Promise.all([
@@ -44,55 +45,105 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <PublicNav />
+
+      {/* HERO */}
       <section className="relative overflow-hidden gradient-hero">
-        <div className="absolute inset-0 pattern-beadwork opacity-20" />
-        <div className="relative mx-auto max-w-6xl px-4 py-24 md:py-32">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium text-white backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" /> Built in Kenya, for Kenya
+        <div className="absolute inset-0 pattern-beadwork opacity-15" />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-20 md:grid-cols-2 md:py-28">
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white/90 backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5 text-gold" /> Built in Kenya, for Kenya
             </span>
-            <h1 className="mt-5 font-display text-5xl font-bold leading-[1.05] text-white md:text-7xl">
-              Find a commercial space anywhere in Kenya, from anywhere in Kenya.
+            <h1 className="mt-5 font-display text-5xl font-bold leading-[1.04] text-white md:text-6xl lg:text-7xl">
+              Commercial spaces across Kenya, <span className="text-gold">at your fingertips.</span>
             </h1>
-            <p className="mt-6 max-w-2xl text-lg text-white/85">
-              Someone in Murang'a can browse available shops in Nairobi, see the pinned location on a map,
-              and contact the owner directly. No travel. No middlemen. All 47 counties.
+            <p className="mt-6 max-w-xl text-lg text-white/85">
+              Discover shops, offices, godowns and stalls in every county. See pinned locations,
+              real photos, and contact owners directly — without leaving home.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
-                <Link to="/seeker/signup">
-                  <Search className="mr-2 h-4 w-4" /> Looking for a Space
+              <Button asChild size="lg" className="bg-gold font-semibold text-[color:var(--savanna-foreground)] hover:bg-gold/90">
+                <Link to="/seeker/login">
+                  <Search className="mr-2 h-4 w-4" /> Find a Space
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20">
-                <Link to="/owner/signup">
-                  <Store className="mr-2 h-4 w-4" /> I Have a Space to Rent
+                <Link to="/owner/login">
+                  <Store className="mr-2 h-4 w-4" /> List a Space
                 </Link>
               </Button>
             </div>
           </div>
+          <div className="relative">
+            <div className="absolute -inset-4 rounded-3xl bg-gold/20 blur-3xl" />
+            <img
+              src={heroImage}
+              alt="Aerial view of a Kenyan city at golden hour"
+              width={1600}
+              height={900}
+              className="relative w-full rounded-3xl shadow-elegant ring-1 ring-white/10"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* AUDIENCE CHOOSER (moved from seeker dashboard) */}
+      <section className="mx-auto -mt-12 max-w-6xl px-4">
+        <div className="grid gap-5 rounded-3xl border border-border bg-card p-6 shadow-elegant md:grid-cols-2">
+          <Link
+            to="/seeker/login"
+            className="group flex items-start gap-4 rounded-2xl border border-border bg-background p-6 transition hover:-translate-y-0.5 hover:border-primary hover:shadow-soft"
+          >
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground">
+              <Search className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="font-display text-xl font-semibold">Looking for a space</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Browse listings, filter by county and price, and contact owners directly.
+              </p>
+              <span className="mt-3 inline-flex items-center text-sm font-medium text-primary">
+                Find a space <ArrowRight className="ml-1 h-4 w-4 transition group-hover:translate-x-1" />
+              </span>
+            </div>
+          </Link>
+          <Link
+            to="/owner/login"
+            className="group flex items-start gap-4 rounded-2xl border border-border bg-background p-6 transition hover:-translate-y-0.5 hover:border-primary hover:shadow-soft"
+          >
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gold">
+              <Store className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="font-display text-xl font-semibold">Have a space to rent out</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Publish your space with photos and a map pin. Receive direct enquiries.
+              </p>
+              <span className="mt-3 inline-flex items-center text-sm font-medium text-primary">
+                List a space <ArrowRight className="ml-1 h-4 w-4 transition group-hover:translate-x-1" />
+              </span>
+            </div>
+          </Link>
         </div>
       </section>
 
       <section className="mx-auto max-w-4xl px-4 py-20">
-        <p className="font-display text-xs uppercase tracking-[0.2em] text-primary">What is Find a Space KE</p>
+        <p className="font-display text-xs uppercase tracking-[0.2em] text-gold">What is Find a Space KE</p>
         <h2 className="mt-3 font-display text-3xl font-bold md:text-4xl">
-          A simple way to discover commercial spaces across Kenya without leaving your home.
+          The premium way to discover commercial spaces across Kenya — without leaving your home.
         </h2>
         <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-          Finding a shop, office, godown or stall used to mean travelling town to town, knocking on doors,
-          following up with agents. Find a Space KE changes that. Every listing has a map pin so you see
-          exactly where the space sits, real photos from the owner, the asking price, and a direct line to
-          contact the owner yourself. Whether you are in Kisumu looking for office space in Nakuru, or in
-          Mombasa hunting for a market stall in Eldoret, the entire country is now searchable from one place.
+          Whether you are in Kisumu looking for office space in Nakuru, or in Mombasa hunting for a market
+          stall in Eldoret, the entire country is now searchable from one place. Every listing has a map
+          pin, real photos, the asking price, and a direct line to the owner.
         </p>
       </section>
 
       <section className="bg-secondary/40 py-20">
-        <div className="mx-auto max-w-6xl px-4">
+        <div className="mx-auto max-w-7xl px-4">
           <div className="flex items-end justify-between gap-4">
             <div>
-              <p className="font-display text-xs uppercase tracking-[0.2em] text-primary">Featured spaces</p>
+              <p className="font-display text-xs uppercase tracking-[0.2em] text-gold">Featured spaces</p>
               <h2 className="mt-2 font-display text-3xl font-bold md:text-4xl">Live listings from owners across Kenya</h2>
             </div>
             <Link to="/seeker/login" className="hidden text-sm font-medium text-primary hover:underline md:inline">
@@ -118,63 +169,6 @@ export default function Landing() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-20">
-        <p className="font-display text-xs uppercase tracking-[0.2em] text-primary">How it works</p>
-        <h2 className="mt-2 font-display text-3xl font-bold md:text-4xl">Two clear paths</h2>
-        <div className="mt-12 grid gap-10 md:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-card p-8">
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-              <Search className="h-3.5 w-3.5" /> Space Seekers
-            </div>
-            <h3 className="mt-4 font-display text-2xl font-semibold">Find your next space in three steps</h3>
-            <ol className="mt-6 space-y-5">
-              {["Sign up as a Space Seeker", "Browse and filter by county, type and price", "Contact the owner directly"].map((t, i) => (
-                <li key={t} className="flex gap-4">
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground font-display font-bold">{i + 1}</span>
-                  <span className="pt-1.5 text-base">{t}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-          <div className="rounded-2xl border border-border bg-card p-8">
-            <div className="inline-flex items-center gap-2 rounded-full bg-highland/10 px-3 py-1 text-xs font-semibold text-highland">
-              <Store className="h-3.5 w-3.5" /> Space Owners
-            </div>
-            <h3 className="mt-4 font-display text-2xl font-semibold">List your space and get discovered</h3>
-            <ol className="mt-6 space-y-5">
-              {["Sign up as a Space Owner", "Publish your space with photos and a map pin", "Receive direct enquiries from seekers"].map((t, i) => (
-                <li key={t} className="flex gap-4">
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-highland text-highland-foreground font-display font-bold">{i + 1}</span>
-                  <span className="pt-1.5 text-base">{t}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-secondary/40 py-20">
-        <div className="mx-auto max-w-6xl px-4">
-          <p className="font-display text-xs uppercase tracking-[0.2em] text-primary">Who it is for</p>
-          <h2 className="mt-2 font-display text-3xl font-bold md:text-4xl">Built for the way Kenya does business</h2>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { t: "Entrepreneurs", d: "Looking for a shop or stall to launch a venture." },
-              { t: "Small business owners", d: "Ready to relocate or open a second branch." },
-              { t: "Market traders", d: "Searching for stalls in busy market spaces." },
-              { t: "Office seekers", d: "Needing private or shared workspace in any town." },
-              { t: "Warehouse seekers", d: "Hunting godowns, containers and storage units." },
-              { t: "Space owners", d: "Wanting your property discovered across Kenya." },
-            ].map((x) => (
-              <div key={x.t} className="rounded-2xl border border-border bg-card p-6">
-                <p className="font-display text-lg font-semibold">{x.t}</p>
-                <p className="mt-1 text-sm text-muted-foreground">{x.d}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-20">
         <div className="grid gap-6 rounded-3xl border border-border bg-card p-10 md:grid-cols-3">
           {[
             { v: stats.spaces, l: "Active spaces", icon: Building2 },
@@ -182,25 +176,11 @@ export default function Landing() {
             { v: stats.owners, l: "Owners registered", icon: Users },
           ].map(({ v, l, icon: Icon }) => (
             <div key={l} className="text-center">
-              <Icon className="mx-auto h-7 w-7 text-primary" />
+              <Icon className="mx-auto h-7 w-7 text-gold" />
               <p className="mt-3 font-display text-4xl font-bold">{v.toLocaleString()}</p>
               <p className="mt-1 text-sm text-muted-foreground">{l}</p>
             </div>
           ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-4xl px-4 pb-20">
-        <div className="rounded-3xl border border-savanna/40 bg-savanna/15 p-10 text-center">
-          <p className="font-display text-xs uppercase tracking-[0.2em] text-primary">A note from us</p>
-          <h2 className="mt-2 font-display text-2xl font-semibold md:text-3xl">
-            We are in our onboarding period
-          </h2>
-          <p className="mt-4 text-base leading-relaxed text-foreground/80">
-            Right now every feature is fully open and free to use. When we introduce plan options later
-            on, you will hear from us well in advance with clear details. For now, focus on what matters,
-            list your space or find your next one.
-          </p>
         </div>
       </section>
 

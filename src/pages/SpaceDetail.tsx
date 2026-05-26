@@ -1,11 +1,12 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { ExternalLink, Heart, MapPin, Phone, Share2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Heart, MapPin, Phone, Share2 } from "lucide-react";
+import { MapView } from "@/components/map/MapView";
 
 const NAV = [
   { to: "/seeker", label: "Home" },
@@ -24,6 +25,7 @@ interface Owner { full_name: string; phone: string }
 export default function SpaceDetail() {
   const { id = "" } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [space, setSpace] = useState<Space | null>(null);
   const [owner, setOwner] = useState<Owner | null>(null);
   const [cover, setCover] = useState(0);
@@ -66,14 +68,17 @@ export default function SpaceDetail() {
 
   const isRent = space.listing_type === "rent";
   const hasMap = space.latitude != null && space.longitude != null;
-  const mapSrc = hasMap ? `https://www.google.com/maps?q=${space.latitude},${space.longitude}&t=k&z=17&output=embed` : null;
   const mapsLink = hasMap ? `https://www.google.com/maps?q=${space.latitude},${space.longitude}` : "#";
 
   return (
     <DashboardShell nav={NAV} accent="primary">
-      <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
-        <div className="space-y-6">
-          <div className="overflow-hidden rounded-2xl bg-muted aspect-[16/10]">
+      <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-4 -ml-2">
+        <ArrowLeft className="mr-1 h-4 w-4" /> Back
+      </Button>
+
+      <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+        <div className="space-y-8">
+          <div className="overflow-hidden rounded-3xl bg-muted aspect-[16/10] shadow-elegant">
             {space.images[cover] ? (
               <img src={space.images[cover]} alt={space.title} className="h-full w-full object-cover" />
             ) : <div className="grid h-full w-full place-items-center text-muted-foreground">No image</div>}
@@ -81,67 +86,85 @@ export default function SpaceDetail() {
           {space.images.length > 1 && (
             <div className="grid grid-cols-5 gap-2">
               {space.images.map((img, i) => (
-                <button key={img} onClick={() => setCover(i)} className={`aspect-square overflow-hidden rounded-md border-2 ${i === cover ? "border-primary" : "border-transparent"}`}>
+                <button key={img} onClick={() => setCover(i)} className={`aspect-square overflow-hidden rounded-md border-2 transition ${i === cover ? "border-primary" : "border-transparent hover:border-border"}`}>
                   <img src={img} alt="" className="h-full w-full object-cover" />
                 </button>
               ))}
             </div>
           )}
+
           <div>
             <div className="flex flex-wrap gap-2">
               <span className="rounded-full bg-secondary px-3 py-1 text-xs font-medium">{space.space_type}</span>
-              <span className={`rounded-full px-3 py-1 text-xs font-semibold ${isRent ? "bg-highland text-highland-foreground" : "bg-maasai text-maasai-foreground"}`}>
+              <span className={`rounded-full px-3 py-1 text-xs font-semibold ${isRent ? "bg-gold text-[color:var(--savanna-foreground)]" : "bg-maasai text-maasai-foreground"}`}>
                 {isRent ? "For Rent" : "For Sale"}
               </span>
-              {space.price_negotiable && <span className="rounded-full bg-savanna/30 px-3 py-1 text-xs font-medium text-foreground">Negotiable</span>}
+              {space.price_negotiable && <span className="rounded-full border border-border px-3 py-1 text-xs font-medium text-foreground">Negotiable</span>}
             </div>
-            <h1 className="mt-3 font-display text-4xl font-bold">{space.title}</h1>
-            <p className="mt-2 flex items-center gap-1 text-muted-foreground"><MapPin className="h-4 w-4" /> {[space.estate, space.town, space.county].filter(Boolean).join(", ")}</p>
-            <p className="mt-4 font-display text-3xl font-bold text-primary">
+            <h1 className="mt-4 font-display text-4xl font-bold leading-tight md:text-5xl">{space.title}</h1>
+            <p className="mt-3 flex items-center gap-1.5 text-muted-foreground">
+              <MapPin className="h-4 w-4 text-gold" /> {[space.estate, space.town, space.county].filter(Boolean).join(", ")}
+            </p>
+            <p className="mt-5 font-display text-4xl font-bold text-primary">
               KSh {Number(space.price).toLocaleString()}
               {isRent && <span className="ml-2 text-sm font-medium text-muted-foreground">per month</span>}
             </p>
           </div>
+
           {space.size_sqft && (
-            <div className="rounded-xl border border-border bg-card p-4">
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">Size</p>
-              <p className="mt-1 font-display text-xl font-semibold">{Number(space.size_sqft).toLocaleString()} sqft</p>
+            <div className="inline-flex flex-col rounded-2xl border border-border bg-card px-5 py-4">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground">Size</p>
+              <p className="mt-1 font-display text-2xl font-semibold">{Number(space.size_sqft).toLocaleString()} sqft</p>
             </div>
           )}
+
           <div>
-            <h2 className="font-display text-xl font-semibold">About this space</h2>
-            <p className="mt-2 whitespace-pre-line text-foreground/85 leading-relaxed">{space.description}</p>
+            <h2 className="font-display text-2xl font-semibold">About this space</h2>
+            <p className="mt-3 whitespace-pre-line text-foreground/85 leading-relaxed">{space.description}</p>
           </div>
+
           {space.amenities.length > 0 && (
             <div>
-              <h2 className="font-display text-xl font-semibold">Amenities</h2>
+              <h2 className="font-display text-2xl font-semibold">Amenities</h2>
               <div className="mt-3 flex flex-wrap gap-2">
-                {space.amenities.map((a) => <span key={a} className="rounded-full border border-border bg-card px-3 py-1 text-xs">{a}</span>)}
+                {space.amenities.map((a) => (
+                  <span key={a} className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium">{a}</span>
+                ))}
               </div>
             </div>
           )}
+
           <div>
-            <h2 className="font-display text-xl font-semibold">Location</h2>
-            {mapSrc ? (
-              <>
-                <div className="mt-3 overflow-hidden rounded-2xl border border-border">
-                  <iframe title="Space location" src={mapSrc} className="h-[360px] w-full" loading="lazy" />
-                </div>
-                <a href={mapsLink} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+            <div className="flex items-end justify-between">
+              <h2 className="font-display text-2xl font-semibold">Location</h2>
+              {hasMap && (
+                <a
+                  href={mapsLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-1.5 text-sm font-medium hover:border-primary hover:text-primary transition"
+                >
                   Open in Google Maps <ExternalLink className="h-3.5 w-3.5" />
                 </a>
-              </>
+              )}
+            </div>
+            {hasMap ? (
+              <div className="mt-3">
+                <MapView lat={space.latitude!} lng={space.longitude!} height={460} />
+                <p className="mt-2 text-xs text-muted-foreground">Zoom in for aerial detail. Drag to pan around the area.</p>
+              </div>
             ) : (
               <p className="mt-3 text-sm text-muted-foreground">Map location not yet pinned by the owner.</p>
             )}
           </div>
         </div>
+
         <aside className="space-y-4 lg:sticky lg:top-20 h-fit">
-          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+          <div className="rounded-3xl border border-border bg-card p-6 shadow-elegant">
             <p className="text-xs uppercase tracking-wider text-muted-foreground">Owner</p>
             <p className="mt-1 font-display text-xl font-semibold">{owner?.full_name ?? "—"}</p>
             <p className="text-sm text-muted-foreground">{space.space_type} · {space.town}, {space.county}</p>
-            <Button asChild className="mt-4 w-full" size="lg">
+            <Button asChild className="mt-4 w-full bg-primary text-primary-foreground hover:bg-primary/90" size="lg">
               <a href={`tel:${owner?.phone ?? ""}`}>
                 <Phone className="mr-2 h-4 w-4" /> {owner?.phone ?? "Call owner"}
               </a>

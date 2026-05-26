@@ -12,13 +12,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { AMENITY_GROUPS, KENYA_COUNTIES, SPACE_TYPES } from "@/lib/counties";
 import { toast } from "sonner";
-import { Upload, X } from "lucide-react";
+import { Upload, X, Info } from "lucide-react";
+import { MapPicker } from "@/components/map/MapPicker";
 
 const NAV = [
   { to: "/owner", label: "My Spaces" },
   { to: "/owner/publish", label: "Publish a Space" },
 ];
-const STEPS = ["Basics", "Details", "Amenities", "Photos", "Location", "Review"];
+const STEPS = ["Basics", "Amenities", "Photos", "Location", "Review"];
 
 export default function Publish() {
   const [params] = useSearchParams();
@@ -32,7 +33,7 @@ export default function Publish() {
     listing_type: "rent" as "rent" | "sale", price: "", price_negotiable: false,
     size_sqft: "", description: "",
     amenities: [] as string[], images: [] as string[],
-    latitude: "" as string, longitude: "" as string,
+    latitude: null as number | null, longitude: null as number | null,
   });
 
   useEffect(() => {
@@ -45,8 +46,7 @@ export default function Publish() {
         estate: data.estate ?? "", listing_type: data.listing_type as "rent" | "sale", price: String(data.price),
         price_negotiable: data.price_negotiable, size_sqft: data.size_sqft ? String(data.size_sqft) : "",
         description: data.description, amenities: data.amenities ?? [], images: data.images ?? [],
-        latitude: data.latitude != null ? String(data.latitude) : "",
-        longitude: data.longitude != null ? String(data.longitude) : "",
+        latitude: data.latitude, longitude: data.longitude,
       });
     })();
   }, [id]);
@@ -65,7 +65,7 @@ export default function Publish() {
 
   const submit = async () => {
     if (!user) return;
-    if (f.images.length === 0) { toast.error("Add at least one photo"); setStep(3); return; }
+    if (f.images.length === 0) { toast.error("Add at least one photo"); setStep(2); return; }
     setSaving(true);
     const payload = {
       owner_id: user.id, title: f.title, description: f.description, space_type: f.space_type,
@@ -73,8 +73,7 @@ export default function Publish() {
       price: Number(f.price), price_negotiable: f.price_negotiable,
       size_sqft: f.size_sqft ? Number(f.size_sqft) : null,
       amenities: f.amenities, images: f.images,
-      latitude: f.latitude ? Number(f.latitude) : null,
-      longitude: f.longitude ? Number(f.longitude) : null,
+      latitude: f.latitude, longitude: f.longitude,
       status: "active",
     };
     const { error } = id
@@ -90,39 +89,50 @@ export default function Publish() {
   const back = () => setStep((s) => Math.max(s - 1, 0));
 
   return (
-    <DashboardShell nav={NAV} accent="highland">
+    <DashboardShell nav={NAV} accent="primary">
       <h1 className="font-display text-3xl font-bold">{id ? "Edit space" : "Publish a space"}</h1>
+
       <div className="mt-6 flex items-center gap-2 overflow-x-auto">
         {STEPS.map((s, i) => (
           <div key={s} className="flex items-center gap-2 shrink-0">
             <div className={`grid h-8 w-8 place-items-center rounded-full text-sm font-semibold ${
-              i === step ? "bg-highland text-highland-foreground" : i < step ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"
+              i === step ? "bg-primary text-primary-foreground" :
+              i < step ? "bg-gold text-[color:var(--savanna-foreground)]" :
+              "bg-secondary text-muted-foreground"
             }`}>{i + 1}</div>
             <span className={`text-sm ${i === step ? "font-semibold" : "text-muted-foreground"}`}>{s}</span>
             {i < STEPS.length - 1 && <div className="mx-2 h-px w-8 bg-border" />}
           </div>
         ))}
       </div>
-      <div className="mt-8 rounded-2xl border border-border bg-card p-6 max-w-3xl">
+
+      {/* Full-width card */}
+      <div className="mt-8 rounded-2xl border border-border bg-card p-6 md:p-8 w-full">
         {step === 0 && (
-          <div className="space-y-4">
-            <div><Label>Space title</Label><Input value={f.title} onChange={(e) => setF({ ...f, title: e.target.value })} placeholder="Modern shop space on Moi Avenue" /></div>
-            <div className="grid sm:grid-cols-2 gap-3">
-              <div><Label>Space type</Label>
+          <div className="space-y-5">
+            <div>
+              <Label>Space title</Label>
+              <Input value={f.title} onChange={(e) => setF({ ...f, title: e.target.value })} placeholder="Modern shop space on Moi Avenue" />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <Label>Space type</Label>
                 <Select value={f.space_type} onValueChange={(v) => setF({ ...f, space_type: v })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>{SPACE_TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
-              <div><Label>Listing type</Label>
+              <div>
+                <Label>Listing type</Label>
                 <Select value={f.listing_type} onValueChange={(v) => setF({ ...f, listing_type: v as "rent" | "sale" })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent><SelectItem value="rent">Monthly Rental</SelectItem><SelectItem value="sale">Outright Sale</SelectItem></SelectContent>
                 </Select>
               </div>
             </div>
-            <div className="grid sm:grid-cols-3 gap-3">
-              <div><Label>County</Label>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div>
+                <Label>County</Label>
                 <Select value={f.county} onValueChange={(v) => setF({ ...f, county: v })}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>{KENYA_COUNTIES.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
@@ -131,29 +141,36 @@ export default function Publish() {
               <div><Label>Town</Label><Input value={f.town} onChange={(e) => setF({ ...f, town: e.target.value })} /></div>
               <div><Label>Estate / area</Label><Input value={f.estate} onChange={(e) => setF({ ...f, estate: e.target.value })} /></div>
             </div>
-            <div className="grid sm:grid-cols-2 gap-3 items-end">
+            <div className="grid gap-4 sm:grid-cols-3 items-end">
               <div><Label>Price (KSh)</Label><Input type="number" value={f.price} onChange={(e) => setF({ ...f, price: e.target.value })} /></div>
-              <label className="flex items-center gap-3 pt-6"><Switch checked={f.price_negotiable} onCheckedChange={(v) => setF({ ...f, price_negotiable: v })} /> <span className="text-sm">Price is negotiable</span></label>
+              <div><Label>Size (sqft)</Label><Input type="number" value={f.size_sqft} onChange={(e) => setF({ ...f, size_sqft: e.target.value })} /></div>
+              <label className="flex items-center gap-3 pb-2">
+                <Switch checked={f.price_negotiable} onCheckedChange={(v) => setF({ ...f, price_negotiable: v })} />
+                <span className="text-sm">Price is negotiable</span>
+              </label>
+            </div>
+            <div>
+              <Label>Description</Label>
+              <Textarea rows={6} value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} placeholder="Tell seekers what makes this space great..." />
             </div>
           </div>
         )}
+
         {step === 1 && (
-          <div className="space-y-4">
-            <div><Label>Size (sqft)</Label><Input type="number" value={f.size_sqft} onChange={(e) => setF({ ...f, size_sqft: e.target.value })} /></div>
-            <div><Label>Description</Label><Textarea rows={8} value={f.description} onChange={(e) => setF({ ...f, description: e.target.value })} /></div>
-          </div>
-        )}
-        {step === 2 && (
           <div className="space-y-6">
             {Object.entries(AMENITY_GROUPS).map(([group, items]) => (
               <div key={group}>
-                <p className="font-display text-base font-semibold">{group}</p>
-                <div className="mt-2 grid sm:grid-cols-2 gap-2">
+                <p className="font-display text-sm font-semibold uppercase tracking-wider text-muted-foreground">{group}</p>
+                <div className="mt-3 grid gap-x-4 gap-y-2 sm:grid-cols-3 lg:grid-cols-4">
                   {items.map((a) => (
-                    <label key={a} className="flex items-start gap-2 text-sm cursor-pointer">
-                      <Checkbox checked={f.amenities.includes(a)} onCheckedChange={() => setF((s) => ({
-                        ...s, amenities: s.amenities.includes(a) ? s.amenities.filter((x) => x !== a) : [...s.amenities, a],
-                      }))} />
+                    <label key={a} className="flex items-center gap-2 text-sm cursor-pointer rounded-md px-2 py-1 hover:bg-secondary/60">
+                      <Checkbox
+                        checked={f.amenities.includes(a)}
+                        onCheckedChange={() => setF((s) => ({
+                          ...s,
+                          amenities: s.amenities.includes(a) ? s.amenities.filter((x) => x !== a) : [...s.amenities, a],
+                        }))}
+                      />
                       <span>{a}</span>
                     </label>
                   ))}
@@ -162,7 +179,8 @@ export default function Publish() {
             ))}
           </div>
         )}
-        {step === 3 && (
+
+        {step === 2 && (
           <div className="space-y-4">
             <p className="text-sm text-muted-foreground">Upload between 1 and 10 photos. The first photo is the cover.</p>
             <label className="flex h-32 cursor-pointer items-center justify-center rounded-xl border-2 border-dashed border-border hover:border-primary bg-secondary/30">
@@ -186,22 +204,34 @@ export default function Publish() {
             )}
           </div>
         )}
-        {step === 4 && (
+
+        {step === 3 && (
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">Paste latitude/longitude from Google Maps (right-click on the spot).</p>
-            <div className="grid sm:grid-cols-2 gap-3">
-              <div><Label>Latitude</Label><Input value={f.latitude} onChange={(e) => setF({ ...f, latitude: e.target.value })} placeholder="-1.286389" /></div>
-              <div><Label>Longitude</Label><Input value={f.longitude} onChange={(e) => setF({ ...f, longitude: e.target.value })} placeholder="36.817223" /></div>
+            <div>
+              <h3 className="font-display text-lg font-semibold">Confirm the location on the map</h3>
+              <p className="text-sm text-muted-foreground">
+                We've placed a pin based on your county, town and area. Drag it to fine-tune the exact spot.
+              </p>
             </div>
-            {f.latitude && f.longitude && (
-              <div className="overflow-hidden rounded-xl border border-border">
-                <iframe title="Preview" className="h-72 w-full" loading="lazy"
-                  src={`https://www.google.com/maps?q=${f.latitude},${f.longitude}&t=k&z=17&output=embed`} />
-              </div>
-            )}
+            <MapPicker
+              county={f.county}
+              town={f.town}
+              estate={f.estate}
+              lat={f.latitude}
+              lng={f.longitude}
+              onChange={(la, ln) => setF((s) => ({ ...s, latitude: la, longitude: ln }))}
+            />
+            <div className="flex items-start gap-2 rounded-lg border border-border bg-secondary/40 p-3 text-sm text-muted-foreground">
+              <Info className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+              <span>
+                If the pin isn't in the right spot, drag it to the correct location. You can also zoom and pan
+                the map for accuracy.
+              </span>
+            </div>
           </div>
         )}
-        {step === 5 && (
+
+        {step === 4 && (
           <div className="space-y-3">
             <h2 className="font-display text-xl font-semibold">Review</h2>
             <ul className="text-sm space-y-1">
@@ -212,16 +242,17 @@ export default function Publish() {
               <li><strong>Size:</strong> {f.size_sqft || "—"} sqft</li>
               <li><strong>Amenities:</strong> {f.amenities.length}</li>
               <li><strong>Photos:</strong> {f.images.length}</li>
-              <li><strong>Pinned:</strong> {f.latitude && f.longitude ? "Yes" : "No"}</li>
+              <li><strong>Pinned on map:</strong> {f.latitude != null && f.longitude != null ? "Yes" : "No"}</li>
             </ul>
           </div>
         )}
+
         <div className="mt-8 flex justify-between">
           <Button variant="outline" onClick={back} disabled={step === 0}>Back</Button>
           {step < STEPS.length - 1 ? (
-            <Button onClick={next} className="bg-highland text-highland-foreground hover:bg-highland/90">Next</Button>
+            <Button onClick={next} className="bg-primary text-primary-foreground hover:bg-primary/90">Next</Button>
           ) : (
-            <Button onClick={submit} disabled={saving} className="bg-highland text-highland-foreground hover:bg-highland/90">
+            <Button onClick={submit} disabled={saving} className="bg-primary text-primary-foreground hover:bg-primary/90">
               {saving ? "Publishing…" : id ? "Save changes" : "Publish listing"}
             </Button>
           )}
