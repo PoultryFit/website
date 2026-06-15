@@ -29,7 +29,7 @@ export default function Landing() {
         .select("id,title,space_type,listing_type,county,town,price,images")
         .eq("status", "active")
         .order("created_at", { ascending: false })
-        .limit(8);
+        .limit(10);
       setFeatured((data ?? []) as SpaceSummary[]);
 
       const [{ count: sc }, { data: countyData }, { count: oc }] = await Promise.all([
