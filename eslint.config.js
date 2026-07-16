@@ -6,7 +6,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  { ignores: ["dist", ".output", ".vinxi"] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
@@ -24,7 +24,11 @@ export default tseslint.config(
         "error",
         {
           paths: [
-            { name: "server-only", message: "This app is a static Vite SPA and must not import server-only modules." },
+            {
+              name: "server-only",
+              message:
+                "TanStack Start does not use the Next.js `server-only` package. Rename the module to `*.server.ts` or mark it with `@tanstack/react-start/server-only`.",
+            },
           ],
         },
       ],
