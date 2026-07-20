@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { useState, type FormEvent } from "react";
-import { Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
+import { Mail, MapPin, Send, CheckCircle2, Phone } from "lucide-react";
 import patternImage from "@/assets/pattern-topo.jpg";
 
 export const Route = createFileRoute("/contact")({
@@ -55,7 +55,19 @@ function ContactPage() {
               </div>
               <div>
                 <h3 className="font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">Email</h3>
-                <p className="mt-1 font-medium">hello@poultryfit.ke</p>
+                <p className="mt-1 font-medium">info.jhub@jkuat.ac.ke</p>
+                <p className="mt-1 text-xs text-muted-foreground">Routed via JHUB Africa for now</p>
+              </div>
+            </div>
+          </div>
+          <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 hover-lift">
+            <div className="flex items-start gap-4">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl gradient-brand text-primary-foreground shadow-soft transition-transform group-hover:scale-110">
+                <Phone className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="font-display text-xs font-semibold uppercase tracking-wider text-muted-foreground">Phone</h3>
+                <p className="mt-1 font-medium">+254 67 52181/4</p>
               </div>
             </div>
           </div>
@@ -76,6 +88,7 @@ function ContactPage() {
         <div className="md:col-span-3">
           <form onSubmit={onSubmit} className="relative overflow-hidden rounded-2xl border border-border bg-card p-6 sm:p-8 space-y-5 shadow-soft">
             <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full gradient-brand opacity-10 blur-2xl" aria-hidden />
+            <p className="text-sm text-muted-foreground">We will get in touch with you shortly.</p>
             <div>
               <label htmlFor="name" className="block text-sm font-medium">Name</label>
               <input

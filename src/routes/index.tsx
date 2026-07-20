@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
-import { ArrowRight, Ruler, ClipboardList, Wheat, Stethoscope, Sparkles } from "lucide-react";
+import { FeasibilityTeaser } from "@/components/FeasibilityTeaser";
+import { ArrowRight, Ruler, ClipboardList, Wheat, Stethoscope, Sparkles, Scale, MapPin, Calculator, GraduationCap } from "lucide-react";
 import heroImage from "@/assets/hero-coop.jpg";
 import aboutImage from "@/assets/about-hands.jpg";
 
@@ -24,6 +25,17 @@ const steps = [
   { icon: Wheat, n: "03", title: "Feed it for less", body: "Real local feed pricing keeps recurring costs grounded in what agrovets near you actually charge." },
   { icon: Stethoscope, n: "04", title: "Catch problems early", body: "Disease triage points you to nearby vets and agrovets before a small issue becomes a loss." },
 ];
+
+const features = [
+  { icon: Ruler, title: "Feasibility Planner", body: "A recommended flock size from your actual space, housing type, and budget." },
+  { icon: Scale, title: "Bylaw Awareness", body: "Ward and county rules checked before you spend anything, not after." },
+  { icon: Stethoscope, title: "Disease Triage", body: "Symptom and photo based triage with an honest, capped confidence level." },
+  { icon: MapPin, title: "Vet & Agrovet Finder", body: "Nearby professional support, mapped and reachable in two taps." },
+  { icon: Wheat, title: "Costed Feed Plan", body: "A least-cost ration for each growth stage, priced against real local rates." },
+  { icon: Calculator, title: "Setup Cost Estimate", body: "What starting right actually costs, before you buy a single bird." },
+];
+
+const poultryTypes = ["Layers", "Broilers", "Kienyeji", "Ducks", "Quail", "Turkey"];
 
 function HomePage() {
   return (
@@ -64,26 +76,17 @@ function HomePage() {
                 Meet the team
               </Link>
             </div>
+            <div className="mt-8 flex flex-wrap items-center gap-x-2 gap-y-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wider text-white/60 mr-1">Built for</span>
+              <span className="text-xs font-medium text-white/80">{poultryTypes.join(" · ")}</span>
+            </div>
           </div>
         </div>
 
-        {/* Floating stat cards */}
+        {/* Interactive teaser */}
         <div className="mx-auto max-w-6xl px-4 sm:px-6 pb-12 md:pb-0 md:-mt-12 relative z-10">
-          <div className="grid gap-4 sm:grid-cols-3">
-            {[
-              { k: "Space-first", v: "Fits your real square metres" },
-              { k: "Locally aware", v: "Bylaws & nearby agrovets" },
-              { k: "Cost-honest", v: "Grounded in actual feed prices" },
-            ].map((s, i) => (
-              <div
-                key={s.k}
-                className="rounded-xl border border-border bg-card/95 backdrop-blur p-5 shadow-soft hover-lift"
-                style={{ animation: `fade-in-up 0.7s ${0.2 + i * 0.1}s cubic-bezier(0.22,1,0.36,1) both` }}
-              >
-                <p className="text-xs font-semibold uppercase tracking-wider text-primary">{s.k}</p>
-                <p className="mt-1 text-sm text-foreground/80">{s.v}</p>
-              </div>
-            ))}
+          <div className="max-w-2xl mx-auto md:mx-0" style={{ animation: "fade-in-up 0.7s 0.2s cubic-bezier(0.22,1,0.36,1) both" }}>
+            <FeasibilityTeaser />
           </div>
         </div>
       </section>
@@ -130,6 +133,30 @@ function HomePage() {
         </div>
       </section>
 
+      {/* Key features */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-20 md:pb-28">
+        <div className="max-w-2xl">
+          <p className="text-sm font-semibold uppercase tracking-wider text-primary">Key features</p>
+          <h2 className="mt-2 font-display text-3xl md:text-4xl font-bold">
+            Six things, working together
+          </h2>
+        </div>
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f) => {
+            const Icon = f.icon;
+            return (
+              <div key={f.title} className="group rounded-2xl border border-border bg-card p-6 hover-lift">
+                <div className="grid h-11 w-11 place-items-center rounded-xl bg-secondary text-primary transition-transform group-hover:scale-110">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="mt-4 font-display text-base font-semibold">{f.title}</h3>
+                <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{f.body}</p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       {/* How it works */}
       <section className="relative border-y border-border overflow-hidden">
         <div className="absolute inset-0 grain-bg opacity-60" aria-hidden />
@@ -166,6 +193,20 @@ function HomePage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* Backed by */}
+      <section className="border-y border-border bg-secondary/40">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-center">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <GraduationCap className="h-4 w-4 text-primary" />
+            <span>Jomo Kenyatta University of Agriculture and Technology</span>
+          </div>
+          <span className="hidden sm:inline text-border">|</span>
+          <span className="text-sm text-muted-foreground">JHUB Africa Internship Programme</span>
+          <span className="hidden sm:inline text-border">|</span>
+          <span className="text-sm text-muted-foreground">Supervisor: Mr Simon Mwangi</span>
         </div>
       </section>
 

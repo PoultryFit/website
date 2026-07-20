@@ -52,12 +52,7 @@ export function SiteHeader() {
               {n.label}
             </Link>
           ))}
-          <a
-            href={POULTRYFIT_APP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ml-2 inline-flex items-center gap-1.5 rounded-md gradient-brand px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition shadow-soft"
-          >
+          <a href={POULTRYFIT_APP_URL} target="_blank" rel="noopener noreferrer" className="ml-2 inline-flex items-center gap-1.5 rounded-md gradient-brand px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition shadow-soft">
             Open PoultryFit
             <ExternalLink className="h-3.5 w-3.5" />
           </a>
@@ -79,19 +74,13 @@ export function SiteHeader() {
                 to={n.to}
                 onClick={() => setOpen(false)}
                 activeOptions={{ exact: n.to === "/" }}
-                className="px-2 py-3 text-sm font-medium text-muted-foreground border-b border-border last:border-0"
-                activeProps={{ className: "px-2 py-3 text-sm font-medium text-primary border-b border-border last:border-0" }}
+                className="flex items-center px-2 py-3.5 text-sm font-medium text-muted-foreground border-b border-border last:border-0"
+                activeProps={{ className: "flex items-center px-2 py-3.5 text-sm font-medium text-primary border-b border-border last:border-0" }}
               >
                 {n.label}
               </Link>
             ))}
-            <a
-              href={POULTRYFIT_APP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setOpen(false)}
-              className="mt-3 inline-flex items-center justify-center gap-1.5 rounded-md gradient-brand px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90 transition shadow-soft"
-            >
+            <a href={POULTRYFIT_APP_URL} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className="mt-3 inline-flex items-center justify-center gap-1.5 rounded-md gradient-brand px-4 py-3.5 text-sm font-medium text-primary-foreground hover:opacity-90 transition shadow-soft">
               Open PoultryFit
               <ExternalLink className="h-3.5 w-3.5" />
             </a>

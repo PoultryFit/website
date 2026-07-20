@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
-import { Target, AlertTriangle, Lightbulb, GraduationCap, ArrowRight } from "lucide-react";
+import { Target, AlertTriangle, Lightbulb, GraduationCap, ArrowRight, Scale, Network, Check, X } from "lucide-react";
 import aboutImage from "@/assets/about-hands.jpg";
 import patternImage from "@/assets/pattern-topo.jpg";
 
@@ -78,6 +78,18 @@ function AboutPage() {
             title: "Our approach",
             body: "PoultryFit Kenya is a feasibility-first platform not just another farm management dashboard. We help people decide whether and how to start, not only manage what they already have. That framing shapes every feature: space-and-budget planning, bylaw awareness, local feed pricing, and disease triage tied to nearby vets and agrovets.",
           },
+          {
+            icon: Scale,
+            tone: "accent",
+            title: "Grounded in real regulation",
+            body: "Nairobi City County's Urban Agriculture Promotion and Regulation Act (2015) and the national Livestock (Poultry Industry) Regulations (2023) are real, but scattered. None of it is hidden, but none of it is gathered anywhere a first-time keeper would naturally look before buying chicks and building a coop. We do that translation work directly, ward by ward.",
+          },
+          {
+            icon: Network,
+            tone: "primary",
+            title: "Built to grow, not just to launch",
+            body: "Feed pricing sits behind our own API rather than being hardcoded into the app, fed by prices we research directly from agrovets in our launch wards. That's a deliberate choice. As individual agrovets in Kenya increasingly gain the ability to expose their own pricing and stock data, a trend already underway, our pricing endpoint can plug into theirs directly, turning a one-directional referral into a real two-sided relationship.",
+          },
         ].map((b) => {
           const Icon = b.icon;
           const toneRing = b.tone === "accent" ? "ring-accent/30" : "ring-primary/20";
@@ -99,6 +111,39 @@ function AboutPage() {
             </div>
           );
         })}
+
+        {/* Why not an existing tool */}
+        <div className="rounded-2xl border border-border bg-card p-7 md:p-9">
+          <h2 className="font-display text-2xl font-bold">Why not just use an existing tool?</h2>
+          <p className="mt-3 text-muted-foreground leading-relaxed">
+            Capable poultry tools already exist  FlockDash is the closest example, tracking
+            batches, finances, and disease from photographs. It's a fair question to ask why
+            we're not just using it.
+          </p>
+          <div className="mt-7 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-xl border border-border bg-background p-5">
+              <p className="flex items-center gap-2 text-sm font-semibold text-muted-foreground">
+                <X className="h-4 w-4" />
+                FlockDash & similar tools
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                Built for a keeper who already has a flock, a coop, and a settled answer on
+                where their birds will live. They optimise an operation that already exists.
+              </p>
+            </div>
+            <div className="rounded-xl border border-primary/30 bg-secondary p-5">
+              <p className="flex items-center gap-2 text-sm font-semibold text-primary">
+                <Check className="h-4 w-4" />
+                PoultryFit Kenya
+              </p>
+              <p className="mt-2 text-sm text-foreground leading-relaxed">
+                Built for the decision that comes first  whether starting is feasible at all,
+                made by someone who doesn't yet have a flock, a coop, or a settled answer on
+                whether their ward permits poultry keeping.
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* Affiliation */}
         <div className="relative overflow-hidden rounded-2xl gradient-brand p-8 md:p-10 text-primary-foreground shadow-lift">

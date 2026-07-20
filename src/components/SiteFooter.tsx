@@ -21,11 +21,11 @@ export function SiteFooter() {
         </div>
         <div>
           <h4 className="text-sm font-semibold text-foreground">Explore</h4>
-          <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-            <li><Link to="/" className="hover:text-primary transition">Home</Link></li>
-            <li><Link to="/about" className="hover:text-primary transition">About</Link></li>
-            <li><Link to="/team" className="hover:text-primary transition">Team</Link></li>
-            <li><Link to="/contact" className="hover:text-primary transition">Contact</Link></li>
+          <ul className="mt-4 space-y-1 text-sm text-muted-foreground">
+            <li><Link to="/" className="inline-block py-1.5 hover:text-primary transition">Home</Link></li>
+            <li><Link to="/about" className="inline-block py-1.5 hover:text-primary transition">About</Link></li>
+            <li><Link to="/team" className="inline-block py-1.5 hover:text-primary transition">Team</Link></li>
+            <li><Link to="/contact" className="inline-block py-1.5 hover:text-primary transition">Contact</Link></li>
           </ul>
         </div>
         <div>

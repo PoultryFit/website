@@ -1,7 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
-import { Crown, Brain, Activity, Server, Database, Palette, type LucideIcon, Share2Icon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Crown, Brain, Activity, Server, Database, Palette, type LucideIcon, Share2Icon, Maximize2, X } from "lucide-react";
 import patternImage from "@/assets/pattern-topo.jpg";
+
+// Drop each member's photo into src/assets/team/ and import it here.
+// Leave the import commented out (and `photo` unset below) for anyone
+// whose photo isn't ready yet — they'll just show the initials badge instead.
+import nicholasPhoto from "@/assets/team/nicholas-mwangi.jpg";
+import josphatPhoto from "@/assets/team/josphat-munene.jpg";
+import susanPhoto from "@/assets/team/susan-waweru.jpg";
+import benedictPhoto from "@/assets/team/benedict-mutua.jpg";
+import eugenePhoto from "@/assets/team/eugene-kipkoech.jpg";
+import joshuaPhoto from "@/assets/team/joshua-mulatya.jpg";
 
 export const Route = createFileRoute("/team")({
   head: () => ({
@@ -16,17 +27,17 @@ export const Route = createFileRoute("/team")({
 });
 
 type Tone = "primary" | "accent" | "dark";
-type Member = { name: string; role: string; owns: string; tone: Tone; icon: LucideIcon };
+type Member = { name: string; role: string; owns: string; tone: Tone; icon: LucideIcon; photo?: string };
 
 const team: Member[] = [
-  { name: "Nicholas Mwangi", role: "Team Lead", owns: "Owns project direction, delivery, and stakeholder coordination.", tone: "primary", icon: Crown },
-  { name: "Josphat Munene", role: "Machine Learning", owns: "Owns flock-feasibility and feed modelling work.", tone: "accent", icon: Brain },
-  { name: "Susan Waweru", role: "Machine Learning", owns: "Owns disease triage modelling and dataset curation.", tone: "dark", icon: Activity },
-  { name: "Benedict Mutua", role: "Backend Development", owns: "Owns core API surface and service architecture.", tone: "accent", icon: Server },
+  { name: "Nicholas Mwangi", role: "Team Lead", owns: "Owns project direction, delivery, and stakeholder coordination.", tone: "primary", icon: Crown, photo: nicholasPhoto },
+  { name: "Josphat Munene", role: "Machine Learning", owns: "Owns flock-feasibility and feed modelling work.", tone: "accent", icon: Brain, photo: josphatPhoto },
+  { name: "Susan Waweru", role: "Machine Learning", owns: "Owns disease triage modelling and dataset curation.", tone: "dark", icon: Activity, photo: susanPhoto },
+  { name: "Benedict Mutua", role: "Backend Development", owns: "Owns core API surface and service architecture.", tone: "accent", icon: Server, photo: benedictPhoto },
   { name: "Linet Mungai", role: "Backend Development & Database", owns: "Owns data modelling, persistence, and integrations.", tone: "primary", icon: Database },
-  { name: "Eugene Kipkoech", role: "Frontend Development", owns: "Owns the user-facing experience and design system.", tone: "dark", icon: Palette },
+  { name: "Eugene Kipkoech", role: "Frontend Development", owns: "Owns the user-facing experience and design system.", tone: "dark", icon: Palette, photo: eugenePhoto },
   { name: "Sheldon Jahonga", role: "Frontend Development", owns: "Owns UI implementation, component architecture, and cross-browser compatibility.", tone: "accent", icon: Palette },
-  { name: "Joshua Mulatya", role: "Mass Communication", owns: "By-Laws research, Agrovet prices curation.", tone: "dark", icon: Share2Icon },
+  { name: "Joshua Mulatya", role: "Mass Communication", owns: "By-Laws research, Agrovet prices curation.", tone: "dark", icon: Share2Icon, photo: joshuaPhoto },
 ];
 
 const toneStyles: Record<Tone, { ring: string; chip: string; iconBg: string }> = {
@@ -52,6 +63,17 @@ function initials(name: string) {
 }
 
 function TeamPage() {
+  const [expanded, setExpanded] = useState<Member | null>(null);
+
+  useEffect(() => {
+    if (!expanded) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setExpanded(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [expanded]);
+
   return (
     <SiteLayout>
       <section className="relative isolate overflow-hidden border-b border-border">
@@ -88,9 +110,30 @@ function TeamPage() {
                 <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary/5 blur-2xl transition-opacity group-hover:opacity-100 opacity-50" aria-hidden />
 
                 <div className="relative flex items-center gap-4">
-                  <div className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl ${t.iconBg} shadow-soft font-display text-base font-bold transition-transform group-hover:scale-110 group-hover:-rotate-3`}>
-                    {initials(m.name)}
-                  </div>
+                  {m.photo ? (
+                    <button
+                      type="button"
+                      onClick={() => setExpanded(m)}
+                      aria-label={`View ${m.name}'s photo enlarged`}
+                      className="group/photo relative h-14 w-14 shrink-0 rounded-2xl transition-transform group-hover:scale-110 group-hover:-rotate-3"
+                    >
+                      <img
+                        src={m.photo}
+                        alt={m.name}
+                        width={56}
+                        height={56}
+                        loading="lazy"
+                        className="h-14 w-14 rounded-2xl object-cover shadow-soft ring-1 ring-border"
+                      />
+                      <span className="absolute inset-0 grid place-items-center rounded-2xl bg-black/0 opacity-0 transition group-hover/photo:bg-black/40 group-hover/photo:opacity-100">
+                        <Maximize2 className="h-4 w-4 text-white" />
+                      </span>
+                    </button>
+                  ) : (
+                    <div className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl ${t.iconBg} shadow-soft font-display text-base font-bold transition-transform group-hover:scale-110 group-hover:-rotate-3`}>
+                      {initials(m.name)}
+                    </div>
+                  )}
                   <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${t.chip}`}>
                     <Icon className="h-3.5 w-3.5" />
                     {m.role}
@@ -111,6 +154,36 @@ function TeamPage() {
           Jomo Kenyatta University of Agriculture and Technology.
         </p>
       </section>
+
+      {expanded && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-[fade-in_0.15s_ease-out_both]"
+          onClick={() => setExpanded(null)}
+        >
+          <div
+            className="relative max-w-md w-full animate-[fade-in-up_0.2s_cubic-bezier(0.22,1,0.36,1)_both]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setExpanded(null)}
+              aria-label="Close"
+              className="absolute -top-12 right-0 grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20 transition"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <img
+              src={expanded.photo}
+              alt={expanded.name}
+              className="w-full rounded-2xl shadow-lift"
+            />
+            <div className="mt-4 text-center">
+              <p className="font-display text-lg font-semibold text-white">{expanded.name}</p>
+              <p className="text-sm text-white/70">{expanded.role}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </SiteLayout>
   );
 }
