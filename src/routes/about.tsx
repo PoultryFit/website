@@ -64,7 +64,7 @@ function AboutPage() {
             icon: Target,
             tone: "primary",
             title: "Our vision",
-            body: "Every first-time keeper in urban and peri-urban Kenya should be able to make their first move without guessing  and without losing money to avoidable mistakes.",
+            body: "Every first-time keeper in urban and peri-urban Kenya should be able to make their first move without guessing, and without losing money to avoidable mistakes.",
           },
           {
             icon: AlertTriangle,
@@ -89,6 +89,18 @@ function AboutPage() {
             tone: "primary",
             title: "Built to grow, not just to launch",
             body: "Feed pricing sits behind our own API rather than being hardcoded into the app, fed by prices we research directly from agrovets in our launch wards. That's a deliberate choice. As individual agrovets in Kenya increasingly gain the ability to expose their own pricing and stock data, a trend already underway, our pricing endpoint can plug into theirs directly, turning a one-directional referral into a real two-sided relationship.",
+          },
+          {
+            icon: Scale,
+            tone: "accent",
+            title: "A budget that plans, not just checks",
+            body: "The planner doesn't just compare your budget to a flat cost per bird. It reserves real feed money, four weeks of it, on top of buying the birds themselves, using live agrovet prices, so a farmer never gets told they can afford more birds than they can actually feed. Keep more than one species, chicken and duck together, say, and you set a simple priority between them; the planner splits your yard and budget accordingly and sizes each species on its own real space and cost needs, not one number stretched across everything.",
+          },
+          {
+            icon: Network,
+            tone: "primary",
+            title: "A trained model behind the disease check",
+            body: "Disease triage isn't keyword-matching dressed up. It's a real ensemble, an XGBoost classifier trained on 49 real symptoms across 12 named poultry diseases, paired with two image models for a photo of the bird and a photo of its droppings. A farmer picks symptoms, gets an answer immediately, then can optionally add either photo to sharpen it further, each one is a genuine improvement to the prediction, not decoration.",
           },
         ].map((b) => {
           const Icon = b.icon;
@@ -116,7 +128,7 @@ function AboutPage() {
         <div className="rounded-2xl border border-border bg-card p-7 md:p-9">
           <h2 className="font-display text-2xl font-bold">Why not just use an existing tool?</h2>
           <p className="mt-3 text-muted-foreground leading-relaxed">
-            Capable poultry tools already exist  FlockDash is the closest example, tracking
+            Capable poultry tools already exist, FlockDash is the closest example, tracking
             batches, finances, and disease from photographs. It's a fair question to ask why
             we're not just using it.
           </p>
@@ -137,7 +149,7 @@ function AboutPage() {
                 PoultryFit Kenya
               </p>
               <p className="mt-2 text-sm text-foreground leading-relaxed">
-                Built for the decision that comes first  whether starting is feasible at all,
+                Built for the decision that comes first, whether starting is feasible at all,
                 made by someone who doesn't yet have a flock, a coop, or a settled answer on
                 whether their ward permits poultry keeping.
               </p>

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 
-// Same constants the actual app uses (poultry-data.ts) — this teaser
+// Same constants the actual app uses (poultry-data.ts), this teaser
 // is honest math, not a marketing placeholder.
 const SPACE_PER_BIRD_DEEP_LITTER = 0.35;
 const STARTUP_COST_PER_CHICK = 180;
 
-// Same URL as SiteHeader.tsx — keep both in sync once the real app is deployed.
-const POULTRYFIT_APP_URL = "https://app.poultryfit.example";
+// Same URL as SiteHeader.tsx, keep both in sync if it ever changes.
+const POULTRYFIT_APP_URL = "https://poultryfit.poultryfit-kenya.workers.dev";
 
 export function FeasibilityTeaser() {
   const [length, setLength] = useState(6);
@@ -77,7 +77,7 @@ export function FeasibilityTeaser() {
 
       <div className="mt-6 flex items-center justify-between flex-wrap gap-3">
         <p className="text-xs text-muted-foreground max-w-sm">
-          A quick estimate only the real planner also checks your ward's bylaws and lets you choose housing type and starting stage.
+          A quick estimate only, the real planner also checks your ward's bylaws and lets you choose housing type and starting stage.
         </p>
         <a href={POULTRYFIT_APP_URL} target="_blank" rel="noopener noreferrer" className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-primary hover:underline">
           Get your full plan

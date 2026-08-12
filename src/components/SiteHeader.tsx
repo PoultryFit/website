@@ -2,8 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X, Bird, ExternalLink } from "lucide-react";
 
-// TODO: replace with the live PoultryFit app URL once it is deployed.
-const POULTRYFIT_APP_URL = "https://app.poultryfit.example";
+const POULTRYFIT_APP_URL = "https://poultryfit.poultryfit-kenya.workers.dev";
 
 const nav = [
   { to: "/", label: "Home" },

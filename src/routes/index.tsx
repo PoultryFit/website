@@ -8,7 +8,7 @@ import aboutImage from "@/assets/about-hands.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PoultryFit Kenya — Plan your urban flock with confidence" },
+      { title: "PoultryFit Kenya: Plan your urban flock with confidence" },
       { name: "description", content: "PoultryFit Kenya helps first-time urban poultry keepers plan a feasible flock based on space, budget, local bylaws, real feed prices, and disease triage." },
       { property: "og:title", content: "PoultryFit Kenya" },
       { property: "og:description", content: "Decision-support for first-time urban poultry keepers in Kenya." },
@@ -29,13 +29,13 @@ const steps = [
 const features = [
   { icon: Ruler, title: "Feasibility Planner", body: "A recommended flock size from your actual space, housing type, and budget." },
   { icon: Scale, title: "Bylaw Awareness", body: "Ward and county rules checked before you spend anything, not after." },
-  { icon: Stethoscope, title: "Disease Triage", body: "Symptom and photo based triage with an honest, capped confidence level." },
+  { icon: Stethoscope, title: "Disease Triage", body: "A trained model across 12 real poultry diseases, sharpened further with an optional photo of the bird or its droppings." },
   { icon: MapPin, title: "Vet & Agrovet Finder", body: "Nearby professional support, mapped and reachable in two taps." },
   { icon: Wheat, title: "Costed Feed Plan", body: "A least-cost ration for each growth stage, priced against real local rates." },
   { icon: Calculator, title: "Setup Cost Estimate", body: "What starting right actually costs, before you buy a single bird." },
 ];
 
-const poultryTypes = ["Layers", "Broilers", "Kienyeji", "Ducks", "Quail", "Turkey"];
+const poultryTypes = ["Layers", "Broilers", "Kienyeji", "Ducks", "Turkey", "Quail", "Guinea Fowl", "Geese"];
 
 function HomePage() {
   return (
