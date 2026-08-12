@@ -14,6 +14,7 @@ import benedictPhoto from "@/assets/team/benedict-mutua.jpg";
 import eugenePhoto from "@/assets/team/eugene-kipkoech.jpg";
 import joshuaPhoto from "@/assets/team/joshua-mulatya.jpg";
 import linetPhoto from "@/assets/team/linet-mungai.jpg";
+import sheldonPhoto from "@/assets/team/sheldon-jahonga.jpg";
 
 export const Route = createFileRoute("/team")({
   head: () => ({
@@ -37,7 +38,7 @@ const team: Member[] = [
   { name: "Benedict Mutua", role: "Backend Development", owns: "Owns core API surface and service architecture.", tone: "accent", icon: Server, photo: benedictPhoto },
   { name: "Linet Mungai", role: "Backend Development & Database", owns: "Owns data modelling, persistence, and integrations.", tone: "primary", icon: Database , photo: linetPhoto },
   { name: "Eugene Kipkoech", role: "Frontend Development", owns: "Owns the user-facing experience and design system.", tone: "dark", icon: Palette, photo: eugenePhoto },
-  { name: "Sheldon Jahonga", role: "Frontend Development", owns: "Owns UI implementation, component architecture, and cross-browser compatibility.", tone: "accent", icon: Palette },
+  { name: "Sheldon Jahonga", role: "Frontend Development", owns: "Owns UI implementation, component architecture, and cross-browser compatibility.", tone: "accent", icon: Palette , photo: sheldonPhoto },
   { name: "Joshua Mulatya", role: "Mass Communication", owns: "By-Laws research, Agrovet prices curation.", tone: "dark", icon: Share2Icon, photo: joshuaPhoto },
 ];
 
