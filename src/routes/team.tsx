@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { useEffect, useState } from "react";
-import { Crown, Brain, Activity, Server, Database, Palette, type LucideIcon, Share2Icon, Maximize2, X } from "lucide-react";
+import { Crown, Brain, Activity, Server, Database, Palette, type LucideIcon, Share2Icon, Maximize2, X, GraduationCap } from "lucide-react";
 import patternImage from "@/assets/pattern-topo.jpg";
 
 // Drop each member's photo into src/assets/team/ and import it here.
@@ -15,6 +15,7 @@ import eugenePhoto from "@/assets/team/eugene-kipkoech.jpg";
 import joshuaPhoto from "@/assets/team/joshua-mulatya.jpg";
 import linetPhoto from "@/assets/team/linet-mungai.jpg";
 import sheldonPhoto from "@/assets/team/sheldon-jahonga.jpg";
+import lawrenceNderuPhoto from "@/assets/team/lawrence-nderu.jpg";
 
 export const Route = createFileRoute("/team")({
   head: () => ({
@@ -30,6 +31,15 @@ export const Route = createFileRoute("/team")({
 
 type Tone = "primary" | "accent" | "dark";
 type Member = { name: string; role: string; owns: string; tone: Tone; icon: LucideIcon; photo?: string };
+
+const founder: Member = {
+  name: "Dr. Lawrence Nderu",
+  role: "Founder, JHUB Africa",
+  owns: "Founded the JHUB Africa Innovation Programme, under whose guidance and support PoultryFit Kenya was built.",
+  tone: "primary",
+  icon: GraduationCap,
+  photo: lawrenceNderuPhoto,
+};
 
 const team: Member[] = [
   { name: "Nicholas Mwangi", role: "Team Lead", owns: "Owns project direction, delivery, and stakeholder coordination.", tone: "primary", icon: Crown, photo: nicholasPhoto },
@@ -95,6 +105,43 @@ function TeamPage() {
           <p className="mt-4 text-muted-foreground max-w-2xl text-lg">
             A small, focused team spanning machine learning, backend, frontend, and data. Eight people, one platform.
           </p>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-16 md:pt-20">
+        <p className="text-sm font-semibold uppercase tracking-wider text-primary text-center">Founder & Patron</p>
+        <div className="mt-6 mx-auto max-w-2xl">
+          <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-surface p-8 sm:p-10 text-center shadow-soft">
+            <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full gradient-brand opacity-10 blur-3xl" aria-hidden />
+            <div className="relative flex flex-col items-center">
+              <button
+                type="button"
+                onClick={() => setExpanded(founder)}
+                aria-label={`View ${founder.name}'s photo enlarged`}
+                className="group/photo relative h-24 w-24 shrink-0 rounded-full transition-transform hover:scale-105"
+              >
+                <img
+                  src={founder.photo}
+                  alt={founder.name}
+                  width={96}
+                  height={96}
+                  loading="lazy"
+                  className="h-24 w-24 rounded-full object-cover shadow-soft ring-2 ring-primary/20"
+                />
+                <span className="absolute inset-0 grid place-items-center rounded-full bg-black/0 opacity-0 transition group-hover/photo:bg-black/40 group-hover/photo:opacity-100">
+                  <Maximize2 className="h-4 w-4 text-white" />
+                </span>
+              </button>
+
+              <span className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+                <GraduationCap className="h-3.5 w-3.5" />
+                {founder.role}
+              </span>
+
+              <h3 className="mt-3 font-display text-xl font-semibold">{founder.name}</h3>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-md">{founder.owns}</p>
+            </div>
+          </div>
         </div>
       </section>
 
