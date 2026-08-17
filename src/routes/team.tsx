@@ -1,7 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/SiteLayout";
 import { useEffect, useState } from "react";
-import { Crown, Brain, Activity, Server, Database, Palette, type LucideIcon, Share2Icon, Maximize2, X, GraduationCap } from "lucide-react";
+import {
+  Crown,
+  Brain,
+  Activity,
+  Server,
+  Database,
+  Palette,
+  type LucideIcon,
+  Share2Icon,
+  Maximize2,
+  X,
+  GraduationCap,
+} from "lucide-react";
 import patternImage from "@/assets/pattern-topo.jpg";
 
 // Drop each member's photo into src/assets/team/ and import it here.
@@ -21,7 +33,11 @@ export const Route = createFileRoute("/team")({
   head: () => ({
     meta: [
       { title: "Team — PoultryFit Kenya" },
-      { name: "description", content: "The PoultryFit Kenya team, built under the JHUB Africa internship programme at JKUAT." },
+      {
+        name: "description",
+        content:
+          "The PoultryFit Kenya team, built under the JHUB Africa internship programme at JKUAT.",
+      },
       { property: "og:title", content: "The PoultryFit Kenya team" },
       { property: "og:description", content: "Meet the team behind PoultryFit Kenya." },
     ],
@@ -30,26 +46,89 @@ export const Route = createFileRoute("/team")({
 });
 
 type Tone = "primary" | "accent" | "dark";
-type Member = { name: string; role: string; owns: string; tone: Tone; icon: LucideIcon; photo?: string };
+type Member = {
+  name: string;
+  role: string;
+  owns: string;
+  tone: Tone;
+  icon: LucideIcon;
+  photo?: string;
+};
 
 const founder: Member = {
   name: "Dr. Lawrence Nderu",
-  role: "Founder, JHUB Africa",
-  owns: "Founded the JHUB Africa Innovation Programme, under whose guidance and support PoultryFit Kenya was built.",
+  role: "Project Supervisor · JKUAT / JHUB Africa",
+  owns: "Founder of the JHUB Africa Innovation Programme and supervising lecturer for this project at JKUAT, under whose guidance PoultryFit Kenya was built.",
   tone: "primary",
   icon: GraduationCap,
   photo: lawrenceNderuPhoto,
 };
 
 const team: Member[] = [
-  { name: "Nicholas Mwangi", role: "Team Lead", owns: "Owns project direction, delivery, and stakeholder coordination.", tone: "primary", icon: Crown, photo: nicholasPhoto },
-  { name: "Josphat Munene", role: "Machine Learning", owns: "Owns flock-feasibility and feed modelling work.", tone: "accent", icon: Brain, photo: josphatPhoto },
-  { name: "Susan Waweru", role: "Machine Learning", owns: "Owns disease triage modelling and dataset curation.", tone: "dark", icon: Activity, photo: susanPhoto },
-  { name: "Benedict Mutua", role: "Backend Development", owns: "Owns core API surface and service architecture.", tone: "accent", icon: Server, photo: benedictPhoto },
-  { name: "Linet Mungai", role: "Backend Development & Database", owns: "Owns data modelling, persistence, and integrations.", tone: "primary", icon: Database , photo: linetPhoto },
-  { name: "Eugene Kipkoech", role: "Frontend Development", owns: "Owns the user-facing experience and design system.", tone: "dark", icon: Palette, photo: eugenePhoto },
-  { name: "Sheldon Jahonga", role: "Frontend Development", owns: "Owns UI implementation, component architecture, and cross-browser compatibility.", tone: "accent", icon: Palette , photo: sheldonPhoto },
-  { name: "Joshua Mulatya", role: "Mass Communication", owns: "By-Laws research, Agrovet prices curation.", tone: "dark", icon: Share2Icon, photo: joshuaPhoto },
+  {
+    name: "Nicholas Mwangi",
+    role: "Team Lead",
+    owns: "Owns project direction, delivery, and stakeholder coordination.",
+    tone: "primary",
+    icon: Crown,
+    photo: nicholasPhoto,
+  },
+  {
+    name: "Josphat Munene",
+    role: "Machine Learning",
+    owns: "Owns flock-feasibility and feed modelling work.",
+    tone: "accent",
+    icon: Brain,
+    photo: josphatPhoto,
+  },
+  {
+    name: "Susan Waweru",
+    role: "Machine Learning",
+    owns: "Owns disease triage modelling and dataset curation.",
+    tone: "dark",
+    icon: Activity,
+    photo: susanPhoto,
+  },
+  {
+    name: "Benedict Mutua",
+    role: "Backend Development",
+    owns: "Owns core API surface and service architecture.",
+    tone: "accent",
+    icon: Server,
+    photo: benedictPhoto,
+  },
+  {
+    name: "Linet Mungai",
+    role: "Backend Development & Database",
+    owns: "Owns data modelling, persistence, and integrations.",
+    tone: "primary",
+    icon: Database,
+    photo: linetPhoto,
+  },
+  {
+    name: "Eugene Kipkoech",
+    role: "Frontend Development",
+    owns: "Owns the user-facing experience and design system.",
+    tone: "dark",
+    icon: Palette,
+    photo: eugenePhoto,
+  },
+  {
+    name: "Sheldon Jahonga",
+    role: "Frontend Development",
+    owns: "Owns UI implementation, component architecture, and cross-browser compatibility.",
+    tone: "accent",
+    icon: Palette,
+    photo: sheldonPhoto,
+  },
+  {
+    name: "Joshua Mulatya",
+    role: "Mass Communication",
+    owns: "By-Laws research, Agrovet prices curation.",
+    tone: "dark",
+    icon: Share2Icon,
+    photo: joshuaPhoto,
+  },
 ];
 
 const toneStyles: Record<Tone, { ring: string; chip: string; iconBg: string }> = {
@@ -71,7 +150,11 @@ const toneStyles: Record<Tone, { ring: string; chip: string; iconBg: string }> =
 };
 
 function initials(name: string) {
-  return name.split(" ").map((n) => n[0]).slice(0, 2).join("");
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("");
 }
 
 function TeamPage() {
@@ -94,8 +177,14 @@ function TeamPage() {
           style={{ backgroundImage: `url(${patternImage})`, backgroundSize: "cover" }}
           aria-hidden
         />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-surface/70 via-background to-background" aria-hidden />
-        <div className="absolute -top-24 right-0 h-72 w-72 rounded-full gradient-warm opacity-15 blur-3xl" aria-hidden />
+        <div
+          className="absolute inset-0 -z-10 bg-gradient-to-b from-surface/70 via-background to-background"
+          aria-hidden
+        />
+        <div
+          className="absolute -top-24 right-0 h-72 w-72 rounded-full gradient-warm opacity-15 blur-3xl"
+          aria-hidden
+        />
 
         <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-20 md:pt-28 pb-12">
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">Team</p>
@@ -103,16 +192,22 @@ function TeamPage() {
             The people building <span className="text-gradient-brand">PoultryFit Kenya</span>.
           </h1>
           <p className="mt-4 text-muted-foreground max-w-2xl text-lg">
-            A small, focused team spanning machine learning, backend, frontend, and data. Eight people, one platform.
+            A small, focused team spanning machine learning, backend, frontend, and data. Eight
+            people, one platform.
           </p>
         </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-16 md:pt-20">
-        <p className="text-sm font-semibold uppercase tracking-wider text-primary text-center">Founder & Patron</p>
+        <p className="text-sm font-semibold uppercase tracking-wider text-primary text-center">
+          Founder & Patron
+        </p>
         <div className="mt-6 mx-auto max-w-2xl">
           <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-surface p-8 sm:p-10 text-center shadow-soft">
-            <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full gradient-brand opacity-10 blur-3xl" aria-hidden />
+            <div
+              className="absolute -right-16 -top-16 h-40 w-40 rounded-full gradient-brand opacity-10 blur-3xl"
+              aria-hidden
+            />
             <div className="relative flex flex-col items-center">
               <button
                 type="button"
@@ -139,7 +234,9 @@ function TeamPage() {
               </span>
 
               <h3 className="mt-3 font-display text-xl font-semibold">{founder.name}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-md">{founder.owns}</p>
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-md">
+                {founder.owns}
+              </p>
             </div>
           </div>
         </div>
@@ -154,9 +251,14 @@ function TeamPage() {
               <article
                 key={m.name}
                 className={`group relative overflow-hidden rounded-2xl border border-border bg-card p-7 ring-1 ${t.ring} hover-lift transition-all`}
-                style={{ animation: `fade-in-up 0.6s ${i * 0.07}s cubic-bezier(0.22,1,0.36,1) both` }}
+                style={{
+                  animation: `fade-in-up 0.6s ${i * 0.07}s cubic-bezier(0.22,1,0.36,1) both`,
+                }}
               >
-                <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary/5 blur-2xl transition-opacity group-hover:opacity-100 opacity-50" aria-hidden />
+                <div
+                  className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-primary/5 blur-2xl transition-opacity group-hover:opacity-100 opacity-50"
+                  aria-hidden
+                />
 
                 <div className="relative flex items-center gap-4">
                   {m.photo ? (
@@ -179,11 +281,15 @@ function TeamPage() {
                       </span>
                     </button>
                   ) : (
-                    <div className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl ${t.iconBg} shadow-soft font-display text-base font-bold transition-transform group-hover:scale-110 group-hover:-rotate-3`}>
+                    <div
+                      className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl ${t.iconBg} shadow-soft font-display text-base font-bold transition-transform group-hover:scale-110 group-hover:-rotate-3`}
+                    >
                       {initials(m.name)}
                     </div>
                   )}
-                  <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${t.chip}`}>
+                  <span
+                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${t.chip}`}
+                  >
                     <Icon className="h-3.5 w-3.5" />
                     {m.role}
                   </span>
@@ -192,15 +298,18 @@ function TeamPage() {
                 <h3 className="mt-5 font-display text-lg font-semibold">{m.name}</h3>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{m.owns}</p>
 
-                <div className="mt-6 h-px w-full bg-gradient-to-r from-border via-border to-transparent" aria-hidden />
+                <div
+                  className="mt-6 h-px w-full bg-gradient-to-r from-border via-border to-transparent"
+                  aria-hidden
+                />
               </article>
             );
           })}
         </div>
 
         <p className="mt-16 text-sm text-muted-foreground text-center max-w-2xl mx-auto border-t border-border pt-8">
-          Built under the JHUB Africa internship programme, Department of Computing,
-          Jomo Kenyatta University of Agriculture and Technology.
+          Built under the JHUB Africa internship programme, Department of Computing, Jomo Kenyatta
+          University of Agriculture and Technology.
         </p>
       </section>
 
